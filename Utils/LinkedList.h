@@ -1,69 +1,55 @@
 #pragma once
 #include <iostream>
 
-template <typename T>
-class Node 
-{
-public:
-    T data;
-    Node* prev;
-    Node* next;
-
-    Node(T value) : data(value), prev(nullptr), next(nullptr) {}
-};
-
-template <typename T>
-class LinkedList
-{
-public:
-    LinkedList();
-    LinkedList(const LinkedList& other);
-    LinkedList& operator=(const LinkedList& other);
-    ~LinkedList();
-
-    void InsertBeforeCurrent(T value);
-    void DeleteAtCurrent();
-    void MoveNext();
-    void MovePrevious();
-    void MoveToFirst();
-    void MoveToLast();
-
-    bool IsEmpty() const;
-    void Clear();
-    void Display() const;
-
-    Node<T>* GetCurrentNode() const;
-    Node<T>* GetTailNode() const;
-    Node<T>* GetHeadNode() const;
-
-private:
-
-    Node<T>* head;
-    Node<T>* tail;
-    Node<T>* current; 
-};
-
-template<typename T>
-inline LinkedList<T>::LinkedList() : head(nullptr), tail(nullptr), current(nullptr) {}
-
-template<typename T>
-inline LinkedList<T>::LinkedList(const LinkedList& other) : head(nullptr), tail(nullptr), current(nullptr)
-{
-    Node<T>* otherCurrent = other.head;
-    while (otherCurrent) 
+namespace RIO_UTILS {
+    template <typename T>
+    class Node
     {
-        InsertBeforeCurrent(otherCurrent->data);
-        otherCurrent = otherCurrent->next;
-    }
-}
+    public:
+        T data;
+        Node* prev;
+        Node* next;
 
+        Node(T value) : data(value), prev(nullptr), next(nullptr) {}
+    };
 
-template<typename T>
-inline LinkedList<T>& LinkedList<T>::operator=(const LinkedList& other)
-{
-    if (this != &other) 
+    template <typename T>
+    class LinkedList
     {
-        Clear(); 
+    public:
+        LinkedList();
+        LinkedList(const LinkedList& other);
+        LinkedList& operator=(const LinkedList& other);
+        ~LinkedList();
+
+        void InsertBeforeCurrent(T value);
+        void DeleteAtCurrent();
+        void MoveNext();
+        void MovePrevious();
+        void MoveToFirst();
+        void MoveToLast();
+
+        bool IsEmpty() const;
+        void Clear();
+        void Display() const;
+
+        Node<T>* GetCurrentNode() const;
+        Node<T>* GetTailNode() const;
+        Node<T>* GetHeadNode() const;
+
+    private:
+
+        Node<T>* head;
+        Node<T>* tail;
+        Node<T>* current;
+    };
+
+    template<typename T>
+    inline LinkedList<T>::LinkedList() : head(nullptr), tail(nullptr), current(nullptr) {}
+
+    template<typename T>
+    inline LinkedList<T>::LinkedList(const LinkedList& other) : head(nullptr), tail(nullptr), current(nullptr)
+    {
         Node<T>* otherCurrent = other.head;
         while (otherCurrent)
         {
@@ -71,143 +57,159 @@ inline LinkedList<T>& LinkedList<T>::operator=(const LinkedList& other)
             otherCurrent = otherCurrent->next;
         }
     }
-    return *this;
-}
 
 
-template<typename T>
-inline LinkedList<T>::~LinkedList()
-{
-    Clear();
-}
-
-template<typename T>
-inline void LinkedList<T>::InsertBeforeCurrent(T value)
-{
-    Node<T>* newNode = new Node<T>(value);
-
-    if (current == nullptr) 
+    template<typename T>
+    inline LinkedList<T>& LinkedList<T>::operator=(const LinkedList& other)
     {
-        head = tail = current = newNode;
+        if (this != &other)
+        {
+            Clear();
+            Node<T>* otherCurrent = other.head;
+            while (otherCurrent)
+            {
+                InsertBeforeCurrent(otherCurrent->data);
+                otherCurrent = otherCurrent->next;
+            }
+        }
+        return *this;
     }
-    else 
+
+
+    template<typename T>
+    inline LinkedList<T>::~LinkedList()
     {
-        newNode->prev = current->prev;
-        newNode->next = current;
-        if (current->prev)
-        {
-            current->prev->next = newNode;
-        }
-        else 
-        {
-            head = newNode;
-        }
-        current->prev = newNode;
+        Clear();
     }
-}
 
-template<typename T>
-inline void LinkedList<T>::DeleteAtCurrent()
-{
-    if (current != nullptr)
+    template<typename T>
+    inline void LinkedList<T>::InsertBeforeCurrent(T value)
     {
-        if (current->prev != nullptr)
-        {
-            current->prev->next = current->next;
-        }
-        else 
-        {
-            head = current->next;
-        }
+        Node<T>* newNode = new Node<T>(value);
 
-        if (current->next != nullptr)
+        if (current == nullptr)
         {
-            current->next->prev = current->prev;
+            head = tail = current = newNode;
         }
         else
         {
-            tail = current->prev;
+            newNode->prev = current->prev;
+            newNode->next = current;
+            if (current->prev)
+            {
+                current->prev->next = newNode;
+            }
+            else
+            {
+                head = newNode;
+            }
+            current->prev = newNode;
         }
-
-        delete current;
-        current = nullptr;
     }
-}
 
-template<typename T>
-inline void LinkedList<T>::MoveNext()
-{
-    if (current != nullptr && current->next != nullptr)
+    template<typename T>
+    inline void LinkedList<T>::DeleteAtCurrent()
     {
-        current = current->next;
-    }
-}
+        if (current != nullptr)
+        {
+            if (current->prev != nullptr)
+            {
+                current->prev->next = current->next;
+            }
+            else
+            {
+                head = current->next;
+            }
 
-template<typename T>
-inline void LinkedList<T>::MovePrevious()
-{
-    if (current != nullptr && current->prev != nullptr)
+            if (current->next != nullptr)
+            {
+                current->next->prev = current->prev;
+            }
+            else
+            {
+                tail = current->prev;
+            }
+
+            delete current;
+            current = nullptr;
+        }
+    }
+
+    template<typename T>
+    inline void LinkedList<T>::MoveNext()
     {
-        current = current->prev;
+        if (current != nullptr && current->next != nullptr)
+        {
+            current = current->next;
+        }
     }
-}
 
-template<typename T>
-inline void LinkedList<T>::MoveToFirst()
-{
-    current = head;
-}
+    template<typename T>
+    inline void LinkedList<T>::MovePrevious()
+    {
+        if (current != nullptr && current->prev != nullptr)
+        {
+            current = current->prev;
+        }
+    }
 
-template<typename T>
-inline void LinkedList<T>::MoveToLast()
-{
-    current = tail;
-}
+    template<typename T>
+    inline void LinkedList<T>::MoveToFirst()
+    {
+        current = head;
+    }
 
-template<typename T>
-inline Node<T>* LinkedList<T>::GetCurrentNode() const
-{
-    return current;
-}
+    template<typename T>
+    inline void LinkedList<T>::MoveToLast()
+    {
+        current = tail;
+    }
 
-template<typename T>
-inline Node<T>* LinkedList<T>::GetTailNode() const
-{
-    return tail;
-}
+    template<typename T>
+    inline Node<T>* LinkedList<T>::GetCurrentNode() const
+    {
+        return current;
+    }
 
-template<typename T>
-inline Node<T>* LinkedList<T>::GetHeadNode() const
-{
-    return head;
-}
+    template<typename T>
+    inline Node<T>* LinkedList<T>::GetTailNode() const
+    {
+        return tail;
+    }
 
-template<typename T>
-inline bool LinkedList<T>::IsEmpty() const
-{
-    return head == nullptr;
-}
+    template<typename T>
+    inline Node<T>* LinkedList<T>::GetHeadNode() const
+    {
+        return head;
+    }
 
-template<typename T>
-inline void LinkedList<T>::Clear()
-{
-    while (head)
+    template<typename T>
+    inline bool LinkedList<T>::IsEmpty() const
+    {
+        return head == nullptr;
+    }
+
+    template<typename T>
+    inline void LinkedList<T>::Clear()
+    {
+        while (head)
+        {
+            Node<T>* temp = head;
+            head = head->next;
+            delete temp;
+        }
+        tail = current = nullptr;
+    }
+
+    template<typename T>
+    inline void LinkedList<T>::Display() const
     {
         Node<T>* temp = head;
-        head = head->next;
-        delete temp;
+        while (temp)
+        {
+            std::cout << temp->data << " ";
+            temp = temp->next;
+        }
+        std::cout << std::endl;
     }
-    tail = current = nullptr;
-}
-
-template<typename T>
-inline void LinkedList<T>::Display() const
-{
-    Node<T>* temp = head;
-    while (temp)
-    {
-        std::cout << temp->data << " ";
-        temp = temp->next;
-    }
-    std::cout << std::endl;
 }

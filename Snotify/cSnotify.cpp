@@ -26,3 +26,7 @@
 //	return true;
 //}
 
+bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
+{
+	return false;
+}

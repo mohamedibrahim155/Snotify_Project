@@ -8,6 +8,15 @@
 #include <sstream>		// String Stream
 #include <string>
 
+
+cPersonGenerator::cPersonGenerator()
+{
+}
+
+cPersonGenerator::~cPersonGenerator()
+{
+}
+
 bool cPersonGenerator::LoadCensusFiles(
 	std::string babyNameFile,
 	std::string surnameFile,
@@ -15,6 +24,128 @@ bool cPersonGenerator::LoadCensusFiles(
 	std::string& errorString)
 {
 	// TODO: Put YOUR amazing code here!
+
+	return ReadSurnameFromFile(surnameFile);
+	
+	return ReadStreetNameFromFile(streetNameFile);
+
+	return LoadBabyNames(babyNameFile);
+}
+
+bool cPersonGenerator::LoadBabyNames(std::string babyfile)
+{
+
+	return ReadBabydataFromFile(babyfile);
+}
+
+bool cPersonGenerator::ReadBabydataFromFile(const std::string& babyfile)
+{
+	std::ifstream file(babyfile);
+
+	if (!file.is_open()) 
+	{
+		std::cerr << "Error opening file: " << babyfile << std::endl;
+		return false;
+	}
+
+	std::string line;
+	int lincount = 0;
+	while (std::getline(file, line))
+	{
+		//if (lincount > 50) break;
+		std::istringstream iss(line);
+		std::string name, gender, count;
+		
+		if (std::getline(iss, name, ',') &&
+			std::getline(iss, gender, ',') &&
+			std::getline(iss, count, ','))
+		{
+			 int countValue;
+            std::stringstream(count) >> countValue;
+			BabyData babyData(name, gender[0], std::stoi(count));
+			babyDataList.Add(babyData);
+		}
+
+		lincount++;
+	}
+
+	std::cout << "Total Lines : " << lincount<< std::endl;
+	file.close();
+	 return true;
+}
+
+bool cPersonGenerator::ReadStreetNameFromFile(const std::string& streetNameFile)
+{
+
+	std::ifstream file(streetNameFile);
+
+	if (!file.is_open())
+	{
+		std::cerr << "Error opening file: " << streetNameFile << std::endl;
+		return false;
+	}
+
+
+	std::string line;
+	int lincount = 0;
+	while (std::getline(file, line))
+	{
+		//if (lincount > 50) break;
+		std::istringstream iss(line);
+		std::string fullStName, StName, StType, postDir;
+
+		if (std::getline(iss, fullStName, ',') &&
+			std::getline(iss, StName, ',') &&
+			std::getline(iss, StType, ',') && std::getline(iss, postDir, ','))
+		{
+			std::cout << "Full Street Name: " << fullStName << std::endl;
+			std::cout << "Street Name: " << StName << std::endl;
+			std::cout << "Street Type: " << StType << std::endl;
+			std::cout << "Post direction : " << postDir << std::endl;
+
+		}
+
+		lincount++;
+	}
+
+	std::cout << "Total Lines : " << lincount << std::endl;
+	file.close();
+
+	return true;
+}
+
+bool cPersonGenerator::ReadSurnameFromFile(const std::string& surname)
+{
+	std::ifstream file(surname);
+
+	if (!file.is_open())
+	{
+		std::cerr << "Error opening file: " << surname << std::endl;
+		return false;
+	}
+
+
+	std::string line;
+	int lincount = 0;
+	while (std::getline(file, line))
+	{
+		//if (lincount > 50) break;
+		std::istringstream iss(line);
+		std::string name, rank;
+
+		if (std::getline(iss, name, ',') &&
+			std::getline(iss, rank, ','))
+		{
+			std::cout << "Name: " << name << std::endl;
+			std::cout << "Rank : " << rank << std::endl;
+		}
+
+		lincount++;
+	}
+
+	std::cout << "Total Lines : " << lincount << std::endl;
+	file.close();
+
 	return true;
 }
 
