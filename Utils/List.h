@@ -18,7 +18,7 @@ public:
 	void Clear();
 	void Insert(size_t index, const T& value);
 	void Sort();
-
+	
 	bool IsEmpty() const;
 	
 	size_t GetLength();
@@ -33,7 +33,8 @@ public:
 		return data[index];
 
 	}
-
+	T& GetLast();
+	T& GetFirst();
 
 	
 private: 
@@ -128,6 +129,18 @@ template<typename T>
 		  std::cout << "Index out of bounds" << std::endl;
 	  }
 	  return data[index];
+  }
+
+  template<typename T>
+  inline T& List<T>::GetLast()
+  {
+	  return data[size - 1];
+  }
+
+  template<typename T>
+  inline T& List<T>::GetFirst()
+  {
+	  return data[0];
   }
 
   template<typename T>

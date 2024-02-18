@@ -17,6 +17,8 @@ class LinkedList
 {
 public:
     LinkedList();
+    LinkedList(const LinkedList& other);
+    LinkedList& operator=(const LinkedList& other);
     ~LinkedList();
 
     void InsertBeforeCurrent(T value);
@@ -45,14 +47,38 @@ template<typename T>
 inline LinkedList<T>::LinkedList() : head(nullptr), tail(nullptr), current(nullptr) {}
 
 template<typename T>
+inline LinkedList<T>::LinkedList(const LinkedList& other) : head(nullptr), tail(nullptr), current(nullptr)
+{
+    Node<T>* otherCurrent = other.head;
+    while (otherCurrent) 
+    {
+        InsertBeforeCurrent(otherCurrent->data);
+        otherCurrent = otherCurrent->next;
+    }
+}
+
+
+template<typename T>
+inline LinkedList<T>& LinkedList<T>::operator=(const LinkedList& other)
+{
+    if (this != &other) 
+    {
+        Clear(); 
+        Node<T>* otherCurrent = other.head;
+        while (otherCurrent)
+        {
+            InsertBeforeCurrent(otherCurrent->data);
+            otherCurrent = otherCurrent->next;
+        }
+    }
+    return *this;
+}
+
+
+template<typename T>
 inline LinkedList<T>::~LinkedList()
 {
-    while (head)
-    {
-        Node<T>* temp = head;
-        head = head->next;
-        delete temp;
-    }
+    Clear();
 }
 
 template<typename T>
