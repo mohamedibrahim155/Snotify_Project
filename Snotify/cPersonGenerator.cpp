@@ -54,6 +54,55 @@ bool cPersonGenerator::LoadCensusFiles(
 	return true;
 }
 
+unsigned int cPersonGenerator::getNumberOfNamesLoaded(void)
+{
+	return listOfBabynames.GetLength();
+}
+
+unsigned int cPersonGenerator::getNumberOfSurnamesLoaded(void)
+{
+	return listOfSurnames.GetLength();
+}
+
+unsigned int cPersonGenerator::getNumberOfStreetsLoaded(void)
+{
+	return listOfStreetnames.GetLength();
+}
+
+cPerson* cPersonGenerator::generateRandomPerson(void)
+{
+	cPerson* newPerson = new cPerson();
+
+	BabyData randomBabyName = listOfBabynames.GetAt(GetRandomNumber(0, listOfBabynames.GetLength()));
+
+	Surname randomSurname = listOfSurnames.GetAt(GetRandomNumber(0, listOfSurnames.GetLength()));
+
+	StreetData randomStreetname = listOfStreetnames.GetAt(GetRandomNumber(0, listOfStreetnames.GetLength()));
+
+	newPerson->first = randomBabyName.name;  // name
+	
+
+	if (randomBabyName.gender == "F")      newPerson->gender = cPerson::FEMALE;
+	else if (randomBabyName.gender == "M") newPerson->gender = cPerson::MALE;
+
+	randomBabyName = listOfBabynames.GetAt(GetRandomNumber(0, listOfBabynames.GetLength())); // generating new name for middle name
+	newPerson->middle = randomBabyName.name;  // Mid name
+
+	newPerson->last = randomSurname.surname; // last name
+
+	newPerson->age = GetRandomNumber(10, 80);
+
+	newPerson->streetName = randomStreetname.streetName;  // Street name
+	newPerson->streetType = randomStreetname.streetType;  // Street type
+	newPerson->streetDirection = randomStreetname.postDirection; //  street Direction
+
+	newPerson->SIN = GenerateRandomSIN();
+
+		
+
+	return newPerson;
+}
+
 bool cPersonGenerator::ReadBabydataFromFile(const std::string& babyfile)
 {
 	std::ifstream file(babyfile);
@@ -133,7 +182,6 @@ bool cPersonGenerator::ReadStreetNameFromFile(const std::string& streetNameFile)
 			if (tokenCount == 0)
 			{
 				data.fullStreetName = token;
-				std::cout << token << std::endl;
 			}
 			else if (tokenCount == 1)
 			{
@@ -223,6 +271,31 @@ int cPersonGenerator::GetRandomNumber(int min, int max)
 	std::uniform_int_distribution<int> distribution(min, max);
 
 	return distribution(gen);
+}
+
+int cPersonGenerator::GenerateRandomSIN()
+{
+	int randomSIN = GetRandomNumber(100000, 900000);
+
+
+	if (IsSINNumberFound(randomSIN))
+	{
+		randomSIN = GetRandomNumber(100000, 900000);
+	}
+
+	listOfSIN.Add(randomSIN);
+
+	return randomSIN;
+}
+
+bool cPersonGenerator::IsSINNumberFound(int SIN)
+{
+	for (size_t i = 0; i < listOfSIN.GetLength(); i++)
+	{
+		if (listOfSIN[i] == SIN) true;
+	}
+
+	return false;
 }
 
 

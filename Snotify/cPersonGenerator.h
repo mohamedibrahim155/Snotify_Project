@@ -50,8 +50,12 @@ private:
 	List<BabyData> listOfBabynames;
 	List<StreetData> listOfStreetnames;
 	List<Surname> listOfSurnames;
-	
+	List<int> listOfSIN;
 	int GetRandomNumber(int min, int max);
+
+	int GenerateRandomSIN();
+
+	bool IsSINNumberFound(int SIN);
 };
 
 
