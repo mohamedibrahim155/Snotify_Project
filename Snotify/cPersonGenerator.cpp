@@ -7,7 +7,7 @@
 #include <fstream>
 #include <sstream>		// String Stream
 #include <string>
-
+#include <random>
 
 cPersonGenerator::cPersonGenerator()
 {
@@ -25,17 +25,33 @@ bool cPersonGenerator::LoadCensusFiles(
 {
 	// TODO: Put YOUR amazing code here!
 
-	return ReadSurnameFromFile(surnameFile);
-	
-	return ReadStreetNameFromFile(streetNameFile);
+	if (!ReadSurnameFromFile(surnameFile))
+	{
+		errorString = "Error in loading Surname file ";
 
-	return LoadBabyNames(babyNameFile);
-}
+		std::cout << errorString << std::endl;
 
-bool cPersonGenerator::LoadBabyNames(std::string babyfile)
-{
+		return false;
+	}
+	if (!ReadBabydataFromFile(babyNameFile))
+	{
+		errorString = "Error in loading Baby file ";
 
-	return ReadBabydataFromFile(babyfile);
+		std::cout << errorString << std::endl;
+
+		return false;
+	}
+	if (!ReadStreetNameFromFile(streetNameFile))
+	{
+		errorString = "Error in loading Street name file ";
+
+		std::cout << errorString << std::endl;
+
+		return false;
+	}
+
+
+	return true;
 }
 
 bool cPersonGenerator::ReadBabydataFromFile(const std::string& babyfile)
@@ -52,24 +68,32 @@ bool cPersonGenerator::ReadBabydataFromFile(const std::string& babyfile)
 	int lincount = 0;
 	while (std::getline(file, line))
 	{
+
 		//if (lincount > 50) break;
 		std::istringstream iss(line);
+
 		std::string name, gender, count;
-		
+
+		lincount++;
+
+		BabyData babyData;
+
 		if (std::getline(iss, name, ',') &&
 			std::getline(iss, gender, ',') &&
 			std::getline(iss, count, ','))
 		{
 			 int countValue;
             std::stringstream(count) >> countValue;
-			BabyData babyData(name, gender[0], std::stoi(count));
-			babyDataList.Add(babyData);
+			babyData.name = name;
+			babyData.gender = gender;
+			babyData.count = countValue;
+
+			listOfBabynames.Add(babyData);
 		}
 
-		lincount++;
+		
 	}
-
-	std::cout << "Total Lines : " << lincount<< std::endl;
+	std::cout << "Total Lines  : " << lincount << " in " << babyfile << std::endl;
 	file.close();
 	 return true;
 }
@@ -88,27 +112,57 @@ bool cPersonGenerator::ReadStreetNameFromFile(const std::string& streetNameFile)
 
 	std::string line;
 	int lincount = 0;
+
 	while (std::getline(file, line))
 	{
 		//if (lincount > 50) break;
 		std::istringstream iss(line);
-		std::string fullStName, StName, StType, postDir;
+		lincount++;
 
-		if (std::getline(iss, fullStName, ',') &&
-			std::getline(iss, StName, ',') &&
-			std::getline(iss, StType, ',') && std::getline(iss, postDir, ','))
+		if (lincount == 1)
 		{
-			std::cout << "Full Street Name: " << fullStName << std::endl;
-			std::cout << "Street Name: " << StName << std::endl;
-			std::cout << "Street Type: " << StType << std::endl;
-			std::cout << "Post direction : " << postDir << std::endl;
-
+			continue;
 		}
 
-		lincount++;
+		StreetData data;
+		std::string token;
+		unsigned int tokenCount = 0;
+
+		while (std::getline(iss, token, ','))
+		{
+			if (tokenCount == 0)
+			{
+				data.fullStreetName = token;
+				std::cout << token << std::endl;
+			}
+			else if (tokenCount == 1)
+			{
+				data.streetName = token;
+			}
+			else if (tokenCount == 2)
+			{
+				data.streetType = token;
+
+			}
+			else if (tokenCount == 3)
+			{
+				data.postDirection = token;
+
+			}
+			if (tokenCount > 4)
+			{
+				continue;
+			}
+			// Ignore the other parts of the line
+			tokenCount++;
+		}
+
+		listOfStreetnames.Add(data);
+
 	}
 
-	std::cout << "Total Lines : " << lincount << std::endl;
+	std::cout << "Total Lines  : " << lincount << " in " << streetNameFile << std::endl;
+
 	file.close();
 
 	return true;
@@ -133,20 +187,42 @@ bool cPersonGenerator::ReadSurnameFromFile(const std::string& surname)
 		std::istringstream iss(line);
 		std::string name, rank;
 
+		lincount++;
+
+		if (lincount == 1)
+		{
+			continue;
+		}
+		Surname data;
+
 		if (std::getline(iss, name, ',') &&
 			std::getline(iss, rank, ','))
 		{
-			std::cout << "Name: " << name << std::endl;
-			std::cout << "Rank : " << rank << std::endl;
+		//std::cout << "Name: " << name << std::endl;
+		//std::cout << "Rank : " << rank << std::endl;
+
+			data.surname = name;
+			data.rank = rank;
+
+			listOfSurnames.Add(data);
 		}
 
-		lincount++;
+		
 	}
 
-	std::cout << "Total Lines : " << lincount << std::endl;
+	std::cout << "Total Lines  : " << lincount << " in " << surname << std::endl;
 	file.close();
 
 	return true;
+}
+
+int cPersonGenerator::GetRandomNumber(int min, int max)
+{
+	std::random_device rd;  
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> distribution(min, max);
+
+	return distribution(gen);
 }
 
 

@@ -40,14 +40,18 @@ public:
 	// Randomly generates a person from the data
 	// Returns 0, NULL, or nullptr if it can't do this. 
 	cPerson* generateRandomPerson(void);
-	List<BabyData> babyDataList;
+	
 private:
-	bool LoadBabyNames(std::string babyfile);
+	
 	bool ReadBabydataFromFile(const std::string& babyfile);
 	bool ReadStreetNameFromFile(const std::string& streetNameFile);
 	bool ReadSurnameFromFile(const std::string& surname);
 	
+	List<BabyData> listOfBabynames;
+	List<StreetData> listOfStreetnames;
+	List<Surname> listOfSurnames;
 	
+	int GetRandomNumber(int min, int max);
 };
 
 
