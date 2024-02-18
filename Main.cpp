@@ -13,18 +13,14 @@ int main()
 
 	for (size_t i = 0; i < test.GetLength(); i++)
 	{
-		std::cout << " Added : " << test[i] << std::endl;
-
+		std::cout << " Add : " << test[2] << std::endl;
 	}
  
   test.Remove(20);
   test.Remove(20);
-
-  int value = test.GetAt(1);
-  std::cout << "Value : " << value << std::endl;
   for (size_t i = 0; i < test.GetLength(); i++)
   {
-	  std::cout << "Current list i : " << test[i] << std::endl;
+	  std::cout << "i : " << test[i] << std::endl;
   }
 
 	return 0;

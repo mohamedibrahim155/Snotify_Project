@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Utils\LinkedList.cpp" />
     <ClCompile Include="Snotify\cPerson.cpp" />
     <ClCompile Include="Snotify\cPersonGenerator.cpp" />
     <ClCompile Include="Snotify\cSnotify.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Utils\LinkedList.h" />
     <ClInclude Include="Snotify\cMusicGenerator.h" />
     <ClInclude Include="Snotify\cPerson.h" />
     <ClInclude Include="Snotify\cPersonGenerator.h" />

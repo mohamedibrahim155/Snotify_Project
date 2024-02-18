@@ -8,26 +8,32 @@ class List
 {
 public: 
 	List();
+	List(size_t intiaSize);
+	List& operator=(const List& other);
 	~List();	
 
 	void Add(const T& value);
 	void Remove(const T& value);
 	void RemoveAt(size_t index);
+	void Clear();
 	void Insert(size_t index, const T& value);
+	void Sort();
+
+	bool IsEmpty() const;
+	
 	size_t GetLength();
 
 	T& GetAt(size_t index);
 	T& operator[](size_t index)
 	{
-
-
 		if (index >= size)
 		{
-			std::cout << "Index out of bounds" << std::endl;
+			std::cout << "Index out of bound" << std::endl;
 		}
 		return data[index];
 
 	}
+
 
 	
 private: 
@@ -36,6 +42,8 @@ private:
 	size_t capacity;
 	size_t size;
 
+	void Resize();
+	void Swap(T& a, T& b);
 
 };
 
@@ -44,10 +52,34 @@ template<typename T>
 {
 }
 
+  template<typename T>
+  inline List<T>::List(size_t intialSize) : data(nullptr), capacity(intialSize), size(intialSize)
+  {
+	  data = new T[capacity];
+  }
+
+  template<typename T>
+  List<T>& List<T>::operator=(const List& other) 
+  {
+	  if (this != &other) 
+	  { 
+		  delete[] data;
+		  capacity = other.capacity;
+		  size = other.size;
+		  data = new T[capacity];
+		  for (size_t i = 0; i < size; i++)
+		  {
+			  data[i] = other.data[i];
+		  }
+	  }
+	  return *this;
+  }
+
  template<typename T>
   List<T>::~List()
  {
 	  delete[] data;
+	  data = nullptr;
  }
 
   template<typename T>
@@ -55,20 +87,8 @@ template<typename T>
   {
 	  if (size == capacity)
 	  {
-		  capacity = (capacity == 0) ? 1 : capacity * 2;
-
-		  T* newTempData = new T[capacity];
-
-		  for (int i = 0; i < size; i++)
-		  {
-			  newTempData[i] = data[i];
-		  }
-
-		  delete[] data;
-
-		  data = newTempData;
+		  Resize();
 	  }
-
 
 	  data[size] = value;
 	  size++;
@@ -110,56 +130,98 @@ template<typename T>
 	  return data[index];
   }
 
+  template<typename T>
+  inline void List<T>::Resize()
+  {
+	  capacity = (capacity == 0) ? 1 : capacity * 2;
+
+	  T* newTempData = new T[capacity];
+
+	  for (size_t i = 0; i < size; ++i) {
+		  newTempData[i] = data[i];
+	  }
+
+	  delete[] data;
+	  data = newTempData;
+  }
+  template<typename T>
+  inline void List<T>::Swap(T& a, T& b)
+  {
+	  T temp = a;
+	  a = b;
+	  b = temp;
+  }
+
+
+
   template <typename T>
   inline void List<T>::RemoveAt(size_t index)
   {
 	  if (index < size)
 	  {
-		  for (size_t i = index; i < size - 1; ++i)
+		  for (size_t i = index; i < size - 1; i++)
 		  {
 			  data[i] = data[i + 1];
 		  }
-		  --size;
+		  size--;
 	  }
+
+	  // Removes the 
+  }
+
+  template<typename T>
+  inline void List<T>::Clear()
+  {
+	  delete[] data;
+	  data = nullptr;
+	  capacity = 0;
+	  size = 0;
+
+	  // Deleting all the values stored
   }
 
   template<typename T>
   inline void List<T>::Insert(size_t index, const T& value)
   {
-	  if (index <= size)
+	  if (index <= size) 
 	  {
 		  if (size == capacity)
 		  {
-			  capacity = (capacity == 0) ? 1 : capacity * 2;
-
-			  T* newTempData = new T[capacity];
-
-			  for (size_t i = 0; i < index; ++i)
-			  {
-				  newTempData[i] = data[i];
-			  }
-
-			  newTempData[index] = value;   // inserted value
-
-			  for (size_t i = index + 1; i <= size; ++i) 
-			  {
-				  newTempData[i] = data[i - 1];
-			  }
-
-			  delete[] data;
-
-			  data = newTempData;
-			  size++;
+			  Resize();
 		  }
-		  else
-		  {
-			  for (size_t i = size; i > index; --i)
-			  {
-				  data[i] = data[i - 1];
-			  }
 
-			  data[index] = value;
-			  size++;
+		  for (size_t i = size; i > index; i--) 
+		  {
+			  data[i] = data[i - 1];
+		  }
+
+		  data[index] = value;
+		  size++;
+	  }
+  }
+  template<typename T>
+  inline void List<T>::Sort()
+  {
+	  // using bubble sort here
+	  for (size_t i = 0; i < size -1; i++)
+	  {
+		  for (size_t j = 0; j < size - i - 1; j++)
+		  {
+			  if (data[j] > data[j + 1])
+			  {
+				  //T* temp = data[j];
+				  //data[j] = data[j + 1];
+
+				  //data[j + 1] = temp;
+
+				  Swap(data[j], data[j + 1]);
+			  }
 		  }
 	  }
+  }
+
+  template<typename T>
+  inline bool List<T>::IsEmpty() const
+  {
+	  return size == 0;
   }
