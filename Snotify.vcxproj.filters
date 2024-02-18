@@ -21,9 +21,33 @@
     <ClCompile Include="Utils\List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Snotify\cPerson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Snotify\cPersonGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Snotify\cSnotify.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\List.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Snotify\cMusicGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Snotify\cPerson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Snotify\cPersonGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Snotify\cSnotify.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Snotify\cSong.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

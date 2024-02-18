@@ -127,10 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Snotify\cPerson.cpp" />
+    <ClCompile Include="Snotify\cPersonGenerator.cpp" />
+    <ClCompile Include="Snotify\cSnotify.cpp" />
     <ClCompile Include="Utils\List.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Snotify\cMusicGenerator.h" />
+    <ClInclude Include="Snotify\cPerson.h" />
+    <ClInclude Include="Snotify\cPersonGenerator.h" />
+    <ClInclude Include="Snotify\cSnotify.h" />
+    <ClInclude Include="Snotify\cSong.h" />
     <ClInclude Include="Utils\List.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
