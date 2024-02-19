@@ -38,6 +38,8 @@ cSong* cMusicGenerator::findSong(std::string songName, std::string artist)
 				return ListOfSongs[i];
 			}
 		}
+
+		return nullptr;
 	}
 	catch (const std::exception& e)
 	{
@@ -104,7 +106,14 @@ void cMusicGenerator::AddSong(std::string& songName, std::string artistName)
 	newSong->artist = artistName;
 	newSong->uniqueID = CreateSongHash(songName, artistName);
 
-	ListOfSongs.Add(newSong);
+	if (!IsHashAlreadyGenerated(newSong->uniqueID))
+	{
+		ListOfGeneratedHash.Add(newSong->uniqueID);
+
+		ListOfSongs.Add(newSong);
+	}
+
+
 }
 
 unsigned int cMusicGenerator::CreateSongHash(std::string& songName, std::string &artistName)
@@ -114,6 +123,8 @@ unsigned int cMusicGenerator::CreateSongHash(std::string& songName, std::string 
 	std::string combinedValue = songName + artistName;
 
 	songHash = CustomHash(combinedValue);
+
+
 
 	return songHash;
 }
@@ -137,4 +148,20 @@ int cMusicGenerator::GetRandomNumber(int min, int max)
 	std::uniform_int_distribution<int> distribution(min, max);
 
 	return distribution(gen);
+}
+
+bool cMusicGenerator::IsHashAlreadyGenerated(unsigned int songHash)
+{
+	if (ListOfGeneratedHash.IsEmpty())
+	{
+		return false;
+	}
+	for (size_t i = 0; i < ListOfGeneratedHash.GetLength(); i++)
+	{
+		if (ListOfGeneratedHash[i] == songHash)
+		{
+			return true;
+		}
+	}
+	return false;
 }

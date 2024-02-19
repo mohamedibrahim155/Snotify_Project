@@ -19,6 +19,7 @@ public:
 	// So case sensitive, etc. 
 	cSong* findSong(std::string songName, std::string artist);
 	List<cSong*> ListOfSongs;
+	List<unsigned int> ListOfGeneratedHash;
 
 private:
 
@@ -28,6 +29,8 @@ private:
 
 	unsigned int CustomHash(const std::string& input);
 	int GetRandomNumber(int min, int max);
+
+	bool IsHashAlreadyGenerated(unsigned int songHash);
 
 	void DeleteDuplicateEntries();
 };
