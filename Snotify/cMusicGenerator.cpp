@@ -12,9 +12,24 @@ cMusicGenerator::~cMusicGenerator()
 {
 }
 
+bool cMusicGenerator::IsUniqueValueGreater(const cSong* valueA, const cSong* valueB)
+{
+	return valueA->uniqueID > valueB->uniqueID;
+}
+
+
+
+
 bool cMusicGenerator::LoadMusicInformation(std::string musicFileName, std::string& errorString)
 {
-	return LoadMusicFile(musicFileName);
+	if (LoadMusicFile(musicFileName))
+	{
+		//BubbleSortSongList();
+
+		QuickSortSongList(0, ListOfSongs.GetLength() - 1);
+		return true;
+	}
+	return false ;
 }
 
 cSong* cMusicGenerator::getRandomSong(void)
@@ -38,7 +53,7 @@ cSong* cMusicGenerator::findSong(std::string songName, std::string artist)
 				return ListOfSongs[i];
 			}
 		}
-
+		std::cerr << "Song not found - " << songName << " by " << artist << std::endl;
 		return nullptr;
 	}
 	catch (const std::exception& e)
@@ -104,13 +119,18 @@ void cMusicGenerator::AddSong(std::string& songName, std::string artistName)
 
 	newSong->name = songName;
 	newSong->artist = artistName;
+
+	int hashID = CreateSongHash(songName, artistName);
 	newSong->uniqueID = CreateSongHash(songName, artistName);
 
-	if (!IsHashAlreadyGenerated(newSong->uniqueID))
+	if (!IsHashAlreadyGenerated(hashID))
 	{
-		ListOfGeneratedHash.Add(newSong->uniqueID);
-
+		SongID++;
+		//newSong->uniqueID = SongID;
+		ListOfGeneratedHash.Add(hashID);
 		ListOfSongs.Add(newSong);
+
+		
 	}
 
 
@@ -164,4 +184,63 @@ bool cMusicGenerator::IsHashAlreadyGenerated(unsigned int songHash)
 		}
 	}
 	return false;
+}
+
+void cMusicGenerator::BubbleSortSongList()
+{
+	for (size_t i = 0; i < ListOfSongs.GetLength() - 1; i++)
+	{
+		for (size_t j = 0; j < ListOfSongs.GetLength() - i - 1; j++)
+		{
+			if (IsUniqueValueGreater(ListOfSongs[j], ListOfSongs[j + 1]))
+			{
+				cSong* temp = ListOfSongs[j];
+				ListOfSongs[j] = ListOfSongs[j + 1];
+				ListOfSongs[j + 1] = temp;
+			}
+		}
+	}
+	//ListOfSongs.Sort();
+}
+
+void cMusicGenerator::QuickSortSongList(int low, int high) {
+	if (low < high)
+	{
+	
+		int partitionIndex = Partition(low, high);
+
+		
+		QuickSortSongList(low, partitionIndex - 1);
+		QuickSortSongList(partitionIndex + 1, high);
+	}
+}
+
+
+int cMusicGenerator::Partition(int low, int high)
+{
+	
+	cSong* pivot = ListOfSongs[high];
+	int i = low - 1;
+
+
+	for (int j = low; j <= high-1; j++)
+	{
+		//if (IsUniqueValueGreater(ListOfSongs[j], pivot)) 
+		if(ListOfSongs[j]->uniqueID > pivot->uniqueID)
+		{
+			i++;
+			Swap(ListOfSongs[i], ListOfSongs[j]);
+		}
+	}
+
+	Swap(ListOfSongs[i + 1], ListOfSongs[high]);
+
+	return i + 1;
+}
+
+void cMusicGenerator::Swap(cSong*& a, cSong*& b)
+{
+	cSong* temp = a;
+	a = b;
+	b = temp;
 }

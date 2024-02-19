@@ -37,7 +37,7 @@ namespace RIO_UTILS
 		}
 		T& GetLast();
 		T& GetFirst();
-
+		void Swap(T& a, T& b);
 
 	private:
 
@@ -46,7 +46,7 @@ namespace RIO_UTILS
 		size_t size;
 
 		void Resize();
-		void Swap(T& a, T& b);
+		
 
 	};
 

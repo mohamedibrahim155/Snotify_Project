@@ -21,6 +21,7 @@ public:
 	List<cSong*> ListOfSongs;
 	List<unsigned int> ListOfGeneratedHash;
 
+	void BubbleSortSongList();
 private:
 
 	bool LoadMusicFile(std::string musicFileName);
@@ -32,7 +33,15 @@ private:
 
 	bool IsHashAlreadyGenerated(unsigned int songHash);
 
-	void DeleteDuplicateEntries();
+	bool IsUniqueValueGreater(const cSong* valueA, const cSong* valueB);
+
+	unsigned int SongID = 10;
+
+	void QuickSortSongList(int low, int high);
+
+	int Partition(int low, int high);
+
+	void Swap(cSong*& a, cSong*& b);
 };
 
 #endif
