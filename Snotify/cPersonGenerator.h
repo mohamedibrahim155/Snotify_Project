@@ -56,6 +56,15 @@ private:
 	int GenerateRandomSIN();
 
 	bool IsSINNumberFound(int SIN);
+
+	char GenerateRandomLetter();
+
+	std::string cities[10] = { "Toronto","Montreal","Vancouver",
+		"Calgary","Edmonton","Ottawa","Quebec City","Winnipeg","Halifax","London" };
+
+	
+	std::string provinces[10] = { "Ontario","Quebec","British Columbia",
+		"Alberta","Manitoba","Nova Scotia","New Brunswick","Saskatchewan","Prince Edward Island","Newfoundland and Labrador"};
 };
 
 

@@ -29,6 +29,7 @@ private:
 	unsigned int CustomHash(const std::string& input);
 	int GetRandomNumber(int min, int max);
 
+	void DeleteDuplicateEntries();
 };
 
 #endif

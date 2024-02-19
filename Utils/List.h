@@ -19,6 +19,7 @@ namespace RIO_UTILS
 		void Clear();
 		void Insert(size_t index, const T& value);
 		void Sort();
+		void CompareSort(bool (*compare)(const T&, const T&));
 
 		bool IsEmpty() const;
 
@@ -228,6 +229,21 @@ namespace RIO_UTILS
 
 					//data[j + 1] = temp;
 
+					Swap(data[j], data[j + 1]);
+				}
+			}
+		}
+	}
+
+	template<typename T>
+	inline void List<T>::CompareSort(bool(*compare)(const T&, const T&))
+	{
+		for (size_t i = 0; i < size - 1; i++)
+		{
+			for (size_t j = 0; j < size - i - 1; j++)
+			{
+				if (compare(data[j], data[j + 1]))
+				{
 					Swap(data[j], data[j + 1]);
 				}
 			}

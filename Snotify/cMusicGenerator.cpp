@@ -24,6 +24,28 @@ cSong* cMusicGenerator::getRandomSong(void)
 	return ListOfSongs.GetAt(randomIndex);
 }
 
+cSong* cMusicGenerator::findSong(std::string songName, std::string artist)
+{
+	unsigned int hashvalue = CreateSongHash(songName, artist);
+
+	try
+	{
+		for (int i = 0; i < ListOfSongs.GetLength(); i++)
+		{
+			if (ListOfSongs[i]->uniqueID == hashvalue)
+			{
+				std::cout << "Found song index = " << i << std::endl;
+				return ListOfSongs[i];
+			}
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Error: Song not found - " << songName << " by " << artist << std::endl;
+	}
+	
+}
+
 bool cMusicGenerator::LoadMusicFile(std::string musicFileName)
 {
 
@@ -37,15 +59,15 @@ bool cMusicGenerator::LoadMusicFile(std::string musicFileName)
 
 
 	std::string line;
-	int lincount = 0;
+	int lineCount = 0;
 
 	while (std::getline(file, line))
 	{
 		//if (lincount > 50) break;
 		std::istringstream iss(line);
-		lincount++;
+		lineCount++;
 
-		if (lincount == 1)
+		if (lineCount == 1)
 		{
 			continue;
 		}
@@ -57,29 +79,14 @@ bool cMusicGenerator::LoadMusicFile(std::string musicFileName)
 
 		while (std::getline(iss, token, ','))
 		{
-			if (tokenCount == 0)
-			{
-				//	data.fullStreetName = token;
-			}
-			else if (tokenCount == 1)
-			{
-				//	data.streetName = token;
-			}
-			else if (tokenCount == 2)
-			{
-				//	data.streetType = token;
-
-			}
-			else if (tokenCount == 3)
+			
+			if (tokenCount == 3)
 			{
 				songName = token;
 			}
 			else if (tokenCount == 4)
 			{
 				artist = token;
-			}
-			else if (tokenCount > 4)
-			{
 				break;
 			}
 

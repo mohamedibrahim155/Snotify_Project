@@ -98,7 +98,17 @@ cPerson* cPersonGenerator::generateRandomPerson(void)
 	newPerson->streetDirection = randomStreetname.postDirection; //  street Direction
 
 	newPerson->SIN = GenerateRandomSIN();
+
+	newPerson->postalCode[0] = GenerateRandomLetter();
+	newPerson->postalCode[1] = static_cast<char>( '0' + GetRandomNumber(0, 9));
+	newPerson->postalCode[2] = GenerateRandomLetter();
+	newPerson->postalCode[3] = static_cast<char>('0' + GetRandomNumber(0, 9));
+	newPerson->postalCode[4] = GenerateRandomLetter();
+	newPerson->postalCode[5] = static_cast<char>('0' + GetRandomNumber(0, 9));
 		
+	newPerson->city = cities[GetRandomNumber(0, 9)];
+	newPerson->province = provinces[GetRandomNumber(0, 9)];
+
 
 	return newPerson;
 }
@@ -298,6 +308,10 @@ bool cPersonGenerator::IsSINNumberFound(int SIN)
 	return false;
 }
 
+char cPersonGenerator::GenerateRandomLetter()
+{
+	return static_cast<char>('A' + rand() % 26);
+}
 
 
 // Here's a simple way to load the comma delimited files:
