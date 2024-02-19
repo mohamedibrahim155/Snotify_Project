@@ -2,7 +2,6 @@
 
 // Warning C26812 : Prefer 'enum class' over 'enum' (Enum.3)
 #pragma warning( disable : 26812 )
-
 cPerson::cPerson()
 {
 	// In here, set the default information
@@ -16,11 +15,17 @@ cPerson::cPerson()
 	// Increment for next created user by a small random amount 
 	const unsigned int MAX_ID_INCREEMNT = 11;
 	cPerson::m_NEXT_Snotify_UniqueUSerID += (rand() % MAX_ID_INCREEMNT);
+
+	if (cPerson::m_NEXT_Snotify_UniqueUSerID == m_Snotify_UniqueUserID)
+	{
+		cPerson::m_NEXT_Snotify_UniqueUSerID += (rand() % MAX_ID_INCREEMNT);
+	}
 }
 
+unsigned int cPerson::m_NEXT_Snotify_UniqueUSerID = 1000;
 // The 1st Snotify user will have ID: 10,000,000
 // static 
-unsigned int cPerson::m_NEXT_Snotify_UniqueUSerID = 10000000;
+
 
 cPerson::~cPerson()
 {
@@ -54,5 +59,5 @@ std::string cPerson::getGenderAsString(void)
 
 unsigned int cPerson::getSnotifyUniqueUserID(void)
 {
-	return m_Snotify_UniqueUserID;
+	return this->m_Snotify_UniqueUserID;
 }

@@ -92,12 +92,12 @@ cPerson* cPersonGenerator::generateRandomPerson(void)
 
 	newPerson->age = GetRandomNumber(10, 80);
 
+	newPerson->streetNumber = GetRandomNumber(1, 1000);
 	newPerson->streetName = randomStreetname.streetName;  // Street name
 	newPerson->streetType = randomStreetname.streetType;  // Street type
 	newPerson->streetDirection = randomStreetname.postDirection; //  street Direction
 
 	newPerson->SIN = GenerateRandomSIN();
-
 		
 
 	return newPerson;
@@ -275,7 +275,7 @@ int cPersonGenerator::GetRandomNumber(int min, int max)
 
 int cPersonGenerator::GenerateRandomSIN()
 {
-	int randomSIN = GetRandomNumber(100000, 900000);
+	int randomSIN = GetRandomNumber(100000000, 999999999);
 
 
 	if (IsSINNumberFound(randomSIN))

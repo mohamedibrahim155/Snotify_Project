@@ -6,34 +6,40 @@
 std::string babyFileName = "Config/BabyName/yob2000.txt";
 std::string streetFileName = "Config/StreetName/Street_Names.csv";
 std::string surnameFileName = "Config/Surname/Names_2010Census.csv";
+//std::string musicFileName = "Config/Music/hot_stuff_2.csv";
+std::string musicFileName = "Config/Music/hot_stuff_3.csv";  // test 
 std::string errorMessage;
 
 int main()
 {
 
 	cPersonGenerator personGenerator;
-
+	cMusicGenerator musicGenerator;
 
 
 	personGenerator.LoadCensusFiles(babyFileName, surnameFileName, streetFileName, errorMessage);
 
-	cPerson* person = personGenerator.generateRandomPerson();
+	musicGenerator.LoadMusicInformation(musicFileName, errorMessage);
 
-	std::cout << "Name : " <<person->first<< std::endl;
-	std::cout << "surname : " <<person->last<< std::endl;
-	std::cout << "Age :" <<person->age<< std::endl;
-	std::cout << "Gender :" <<person->getGenderAsString()<< std::endl;
-	std::cout << "SIN :" <<person->SIN<< std::endl;
-	std::cout << "Snotify UID :" <<person->getSnotifyUniqueUserID()<< std::endl;
-	//std::cout << "Last data : " << personGenerator.babyDataList.GetLast().name << std::endl;
 
-	 person = personGenerator.generateRandomPerson();
-	 std::cout << std::endl;
-	std::cout << "Name : " << person->first << std::endl;
-	std::cout << "surname : " << person->last << std::endl;
-	std::cout << "Age :" << person->age << std::endl;
-	std::cout << "Gender :" << person->getGenderAsString() << std::endl;
-	std::cout << "SIN :" << person->SIN << std::endl;
-	std::cout << "Snotify UID :" << person->getSnotifyUniqueUserID() << std::endl;
+	for (size_t i = 0; i < 60; i++)
+	{
+	/*	cPerson* person = personGenerator.generateRandomPerson();
+		std::cout << "Name : " << person->first << std::endl;
+		std::cout << "surname : " << person->last << std::endl;
+		std::cout << "Age :" << person->age << std::endl;
+		std::cout << "Gender :" << person->getGenderAsString() << std::endl;
+		std::cout << "SIN :" << person->SIN << std::endl;
+		std::cout << "Snotify UID :" << person->getSnotifyUniqueUserID() << std::endl;
+		std::cout << std::endl;*/
+
+
+		std::cout << "Name : "<<musicGenerator.ListOfSongs[i]->name <<std::endl;
+		std::cout << "Artist : "<<musicGenerator.ListOfSongs[i]->artist <<std::endl;
+		std::cout << "Song UID : "<<musicGenerator.ListOfSongs[i]->uniqueID <<std::endl;
+		std::cout << std::endl; 
+		
+	}
+	
 	return 0;
 }
