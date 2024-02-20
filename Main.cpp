@@ -2,6 +2,7 @@
 #include "Utils/List.h"
 #include "Snotify/cMusicGenerator.h"
 #include "Snotify/cPersonGenerator.h"
+#include "Snotify/cSnotify.h"
 #include <chrono>
 #include<random>
 std::string babyFileName = "Config/BabyName/yob2000.txt";
@@ -18,7 +19,7 @@ int main()
 
 	cPersonGenerator personGenerator;
 	cMusicGenerator musicGenerator;
-
+	cSnotify snotify;
 
 	personGenerator.LoadCensusFiles(babyFileName, surnameFileName, streetFileName, errorMessage);
 
@@ -33,6 +34,56 @@ int main()
 	std::cout << "Time Elapsed: " << elapsed_time.count() << " Seconds" << std::endl;
 
 
+	//cSong* randomSong = musicGenerator.getRandomSong();
+
+
+	//snotify.AddSong(randomSong, errorMessage);
+
+	//std::cout << "Added Song : " << randomSong->name <<std::endl;
+
+	//cSong* foundSong = snotify.FindSong(randomSong->name, randomSong->artist);
+	//
+	//std::cout << "Found  Song Name : " << randomSong->name << std::endl;
+	//std::cout << "Found Artist Name : " << randomSong->artist << std::endl;
+	//std::cout << "Found  ID: " << randomSong->getUniqueID() << std::endl;
+
+
+	
+	List<cPerson* > personList;
+	for (size_t i = 0; i < 150; i++)
+	{
+		cPerson* randomperson = personGenerator.generateRandomPerson();
+
+		personList.Add(randomperson);
+
+		snotify.AddUser(randomperson, errorMessage);
+		//snotify.AddUser(randomperson2, errorMessage);
+
+		
+		//personList.Add(randomperson2);
+
+		std::cout << "Added person : " << randomperson->first << std::endl;
+
+		
+	}
+
+	for (size_t i = 0; i < personList.GetLength(); i++)
+	{
+		cPerson* randomperson = personList[i];
+
+		cPerson* findpersonBySIN = snotify.FindUserBySIN(randomperson->SIN);
+		std::cout << "Found  User  first Name : " << findpersonBySIN->first << std::endl;
+		std::cout << "Found  User  middle Name : " << findpersonBySIN->middle << std::endl;
+		std::cout << "Found  User  last Name: " << findpersonBySIN->last << std::endl;
+		std::cout << "Found  User ID : " << findpersonBySIN->getSnotifyUniqueUserID() << std::endl;
+
+		/*cPerson* findpersonBySIN2 = snotify.FindUserBySIN(randomperson2->SIN);
+
+		std::cout << "Found  User   first Name : " << findpersonBySIN2->first << std::endl;
+		std::cout << "Found  User  middle Name : " << findpersonBySIN2->middle << std::endl;
+		std::cout << "Found  User  last Name: " << findpersonBySIN2->last << std::endl;
+		std::cout << "Found  User ID : " << findpersonBySIN2->getSnotifyUniqueUserID() << std::endl;*/
+	}
 
 	//for (size_t i = 0; i < musicGenerator.ListOfSongs.GetLength(); i++)
 	//{

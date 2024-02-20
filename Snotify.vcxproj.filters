@@ -39,6 +39,12 @@
     <ClCompile Include="Snotify\cMusicGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\QuickSort.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Snotify\SnotifyUser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\List.h">
@@ -60,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils\LinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Snotify\SnotifyUser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

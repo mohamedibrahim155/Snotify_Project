@@ -129,14 +129,17 @@
   <ItemGroup>
     <ClCompile Include="Snotify\BabyData.h" />
     <ClCompile Include="Snotify\cMusicGenerator.cpp" />
+    <ClCompile Include="Snotify\SnotifyUser.cpp" />
     <ClCompile Include="Utils\LinkedList.cpp" />
     <ClCompile Include="Snotify\cPerson.cpp" />
     <ClCompile Include="Snotify\cPersonGenerator.cpp" />
     <ClCompile Include="Snotify\cSnotify.cpp" />
     <ClCompile Include="Utils\List.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Utils\QuickSort.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Snotify\SnotifyUser.h" />
     <ClInclude Include="Utils\LinkedList.h" />
     <ClInclude Include="Snotify\cMusicGenerator.h" />
     <ClInclude Include="Snotify\cPerson.h" />

@@ -3,7 +3,9 @@
 
 #include "cPerson.h"
 #include "cSong.h"
-
+#include "../Utils/LinkedList.h"
+#include "../Snotify/SnotifyUser.h"
+using namespace RIO_UTILS;
 
 class cSnotify
 {
@@ -78,6 +80,20 @@ public:
 	bool FindUsersLastName(std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray);
 	// Sorted ascending by last name THEN first name.
 	bool FindUsersFirstLastNames(std::string firstName, std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray);
+
+private: 
+
+	bool GetUserWithSnotifyId(unsigned int snotifyId , SnotifyUser*& snotifyUser);
+	bool GetSongWithId(unsigned int songId , cSong*& song);
+
+	LinkedList<SnotifyUser*> ListOfSnotifyUsers;
+	LinkedList<cSong*> ListOfSongs;
+
+
+	unsigned int CreateSongHash(std::string& songName, std::string& artistName);
+
+
+	unsigned int CustomHash(const std::string& input);
 
 
 };

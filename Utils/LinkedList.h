@@ -95,7 +95,7 @@ namespace RIO_UTILS {
         {
             newNode->prev = current->prev;
             newNode->next = current;
-            if (current->prev)
+            if (current->prev != nullptr)
             {
                 current->prev->next = newNode;
             }

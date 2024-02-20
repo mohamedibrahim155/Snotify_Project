@@ -26,7 +26,220 @@
 //	return true;
 //}
 
+cSnotify::cSnotify()
+{
+}
+
+cSnotify::~cSnotify()
+{
+}
+
 bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 {
+	SnotifyUser* newSnotifyUser = new SnotifyUser();
+
+	newSnotifyUser->person = pPerson;
+
+	ListOfSnotifyUsers.InsertBeforeCurrent(newSnotifyUser);
+
 	return false;
+}
+
+bool cSnotify::DeleteUser(unsigned int SnotifyUserID, std::string& errorString)
+{
+	
+	SnotifyUser* snotifyUser = nullptr;
+
+	if (GetUserWithSnotifyId(SnotifyUserID, snotifyUser))
+	{
+		ListOfSnotifyUsers.DeleteAtCurrent();
+
+		return true;
+	}
+
+	return false;
+}
+
+bool cSnotify::AddSong(cSong* pSong, std::string& errorString)
+{
+
+	ListOfSongs.InsertBeforeCurrent(pSong);
+	return true;
+}
+
+bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
+{
+
+	cSong* deleteSong = nullptr;
+
+	if (GetSongWithId(UniqueSongID, deleteSong))
+	{
+
+	}
+
+	return false;
+}
+
+
+bool cSnotify::GetUserWithSnotifyId(unsigned int snotifyId, SnotifyUser*& snotifyUser)
+{
+
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+
+		return false;
+	}
+
+	ListOfSnotifyUsers.MoveToFirst();
+
+	SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+	do
+	{
+		if (findUser->person->getSnotifyUniqueUserID() == snotifyId)
+		{
+
+			std::cout << "User found" << std::endl;
+			snotifyUser = findUser;
+			return true;
+		}
+		else
+		{
+			ListOfSnotifyUsers.MoveNext();
+
+			findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+		}
+	} while (ListOfSnotifyUsers.GetCurrentNode());
+	
+
+
+	return false;
+}
+
+bool cSnotify::GetSongWithId(unsigned int songId, cSong*& song)
+{
+
+
+
+	if (ListOfSongs.IsEmpty())
+	{
+
+		return false;
+	}
+
+	ListOfSongs.MoveToFirst();
+
+	cSong* findSong = ListOfSongs.GetCurrentNode()->data;
+
+	do
+	{
+		if (findSong->getUniqueID() == songId)
+		{
+
+			std::cout << "Found Song" << std::endl;
+			song = findSong;
+			return true;
+		}
+		else
+		{
+			ListOfSongs.MoveNext();
+
+			findSong = ListOfSongs.GetCurrentNode()->data;
+
+		}
+	} while (ListOfSongs.GetCurrentNode());
+
+
+	return false;
+}
+
+unsigned int cSnotify::CreateSongHash(std::string& songName, std::string& artistName)
+{
+	unsigned int songHash = 0;
+
+	std::string combinedValue = songName + artistName;
+
+	songHash = CustomHash(combinedValue);
+
+
+
+	return songHash;
+}
+
+unsigned int cSnotify::CustomHash(const std::string& input)
+{
+	unsigned int  hash = 0;
+
+	for (char c : input)
+	{
+		hash = hash * 31 + static_cast<unsigned char>(c);
+	}
+
+	return hash;
+}
+
+cPerson* cSnotify::FindUserBySIN(unsigned int SIN)
+{
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+		std::cout << "No snotify users found" <<  __FILE__ << std::endl;
+		return nullptr;
+	}
+
+	cPerson* userWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data->person;
+
+	ListOfSnotifyUsers.MoveToFirst();
+
+	do
+	{
+		if (userWithSIN->SIN == SIN)
+		{
+			return userWithSIN;
+		}
+		else
+		{
+
+			ListOfSnotifyUsers.MoveNext();
+
+			userWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data->person;
+		}
+
+	} while (ListOfSnotifyUsers.GetCurrentNode());
+
+
+	return nullptr;
+}
+
+cSong* cSnotify::FindSong(std::string title, std::string artist)
+{
+	unsigned int hash = CreateSongHash(title, artist);
+
+	cSong* song = nullptr;
+
+	if (GetSongWithId(hash, song))
+	{
+		return song;
+	}
+	else
+	{
+		return nullptr;
+	}
+	
+
+	
+}
+
+cSong* cSnotify::FindSong(unsigned int uniqueID)
+{
+
+	cSong* song = nullptr;
+
+	if (GetSongWithId(uniqueID, song))
+	{
+		return song;
+	}
+
+
+	return nullptr;
 }

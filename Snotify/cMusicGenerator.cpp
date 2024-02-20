@@ -121,7 +121,8 @@ void cMusicGenerator::AddSong(std::string& songName, std::string artistName)
 	newSong->artist = artistName;
 
 	int hashID = CreateSongHash(songName, artistName);
-	newSong->uniqueID = CreateSongHash(songName, artistName);
+//	newSong->uniqueID = CreateSongHash(songName, artistName);
+	newSong->uniqueID = hashID;
 
 	if (!IsHashAlreadyGenerated(hashID))
 	{
