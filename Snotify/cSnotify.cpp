@@ -45,6 +45,22 @@ bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 	return false;
 }
 
+bool cSnotify::UpdateUser(cPerson* pPerson, std::string& errorString)
+{
+	SnotifyUser* UpdatedUser = nullptr;
+
+	if (GetUserWithSnotifyIdAndSIN(pPerson->getSnotifyUniqueUserID(), pPerson->SIN, UpdatedUser))
+	{
+		UpdatedUser->person = pPerson;
+
+		std::cout << "User updated  " << std::endl;
+		return true;
+	}
+
+
+	return false;
+}
+
 bool cSnotify::DeleteUser(unsigned int SnotifyUserID, std::string& errorString)
 {
 	
@@ -114,6 +130,42 @@ bool cSnotify::GetUserWithSnotifyId(unsigned int snotifyId, SnotifyUser*& snotif
 	
 
 
+	return false;
+}
+
+bool cSnotify::GetUserWithSnotifyIdAndSIN(unsigned int snotifyId, unsigned int SIN, SnotifyUser*& snotifyUser)
+{
+
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+
+		return false;
+	}
+
+	ListOfSnotifyUsers.MoveToFirst();
+
+	SnotifyUser* findUserWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+	do
+	{
+		if (findUserWithSIN->person->getSnotifyUniqueUserID() == snotifyId && findUserWithSIN->person->SIN == SIN )
+		{
+
+			std::cout << "User found" << std::endl;
+			snotifyUser = findUserWithSIN;
+			return true;
+		}
+		else
+		{
+			ListOfSnotifyUsers.MoveNext();
+
+			findUserWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+		}
+	} while (ListOfSnotifyUsers.GetCurrentNode());
+
+
+	std::cout << "User Not found" << std::endl;
 	return false;
 }
 
@@ -203,6 +255,38 @@ cPerson* cSnotify::FindUserBySIN(unsigned int SIN)
 			ListOfSnotifyUsers.MoveNext();
 
 			userWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data->person;
+		}
+
+	} while (ListOfSnotifyUsers.GetCurrentNode());
+
+
+	return nullptr;
+}
+
+cPerson* cSnotify::FindUserBySnotifyID(unsigned int SnotifyID)
+{
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+		std::cout << "No snotify users found" << __FILE__ << std::endl;
+		return nullptr;
+	}
+
+	cPerson* userWithSpotifyID = ListOfSnotifyUsers.GetCurrentNode()->data->person;
+
+	ListOfSnotifyUsers.MoveToFirst();
+
+	do
+	{
+		if (userWithSpotifyID->getSnotifyUniqueUserID() == SnotifyID)
+		{
+			return userWithSpotifyID;
+		}
+		else
+		{
+
+			ListOfSnotifyUsers.MoveNext();
+
+			userWithSpotifyID = ListOfSnotifyUsers.GetCurrentNode()->data->person;
 		}
 
 	} while (ListOfSnotifyUsers.GetCurrentNode());
