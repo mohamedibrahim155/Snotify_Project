@@ -40,6 +40,67 @@ bool IsAscendingOrderUniqueID(cPerson& aID, cPerson& bID)
 	return aID.getSnotifyUniqueUserID() < bID.getSnotifyUniqueUserID();
 }
 
+bool IsAscendingOrderString(const char* a, const char* b)
+{
+
+	while (*a != '\0' && *b != '\0')
+	{
+		if (*a < *b)
+		{
+			return true;
+		}
+		else if (*a > *b)
+		{
+			return false;
+		}
+
+		++a;
+		++b;
+	}
+
+	return (*a == '\0' && *b != '\0');
+}
+
+bool IsAscendingOrderBySongTitle(cSong& songA, cSong& songB)
+{
+	std::string songValueA = songA.name;
+	std::string songValueB = songB.name;
+
+	return IsAscendingOrderString(songValueA.c_str(), songValueB.c_str());
+}
+
+bool IsAscendingOrderByArtist(cSong& songA, cSong& songB)
+{
+	std::string artistA = songA.artist;
+	std::string artistB = songB.artist;
+
+	return IsAscendingOrderString(artistA.c_str(), artistB.c_str());
+}
+
+bool IsAscendingbyFirstname(cPerson& aID, cPerson& bID)
+{
+	std::string firstNameA = aID.first;
+	std::string firstNameB = bID.first;
+
+	return IsAscendingOrderString(firstNameA.c_str(), firstNameB.c_str());
+}
+
+bool IsAscendingbyLastname(cPerson& aID, cPerson& bID)
+{
+	std::string lastNameA = aID.last;
+	std::string lastNameB = bID.last;
+
+	return IsAscendingOrderString(lastNameA.c_str(), lastNameB.c_str());
+}
+
+//bool IsAscendingbyLastname(cPerson& aID, cPerson& bID)
+//{
+//	std::string lastNameA = aID.last;
+//	std::string lastNameB = bID.last;
+//
+//	return IsAscendingOrderString(lastNameA.c_str(), lastNameB.c_str());
+//}
+
 bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 {
 	SnotifyUser* newSnotifyUser = new SnotifyUser();
@@ -57,7 +118,11 @@ bool cSnotify::UpdateUser(cPerson* pPerson, std::string& errorString)
 
 	if (GetUserWithSnotifyIdAndSIN(pPerson->getSnotifyUniqueUserID(), pPerson->SIN, UpdatedUser))
 	{
-		UpdatedUser->person = pPerson;
+		UpdatedUser->person->first = pPerson->first;
+		UpdatedUser->person->middle = pPerson->middle;
+		UpdatedUser->person->last = pPerson->last;
+		//UpdatedUser->person->age = pPerson ->first;
+		//UpdatedUser->person->streetDirection = pPerson ->first;
 
 		return true;
 	}
@@ -111,6 +176,83 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 		ListOfSnotifyUsers.DeleteAtCurrent();
 
 		return true;
+	}
+
+	return false;
+}
+
+bool cSnotify::AddSongToUserLibrary(unsigned int snotifyUserID, cSong* pNewSong, std::string& errorString)
+{
+	SnotifyUser* user = nullptr;
+
+	if (GetUserWithSnotifyId(snotifyUserID, user))
+	{
+		if (user)
+		{
+			user->AddSong(pNewSong);
+
+			return true;
+		}
+		else
+		{
+			errorString = "User id :" + std::to_string( snotifyUserID) + " Not found to add song";
+
+			return false;
+		}
+	}
+
+	return false;
+}
+
+bool cSnotify::RemoveSongFromUserLibrary(unsigned int snotifyUserID, unsigned int SnotifySongID, std::string& errorString)
+{
+	SnotifyUser* user = nullptr;
+	if (GetUserWithSnotifyId(snotifyUserID, user))
+	{
+		if (user)
+		{
+			//int songIndex = 0;
+			//if (user->FindSongByIndex(SnotifySongID, songIndex))
+			//{
+			//	user->listOfSongs.RemoveAt(songIndex);
+			//}..      ///removing at index
+
+
+			cSong* foundSong = user->FindSong(SnotifySongID);
+
+			if (foundSong)
+			{ 
+				user->listOfSongs.Remove(foundSong);    ///removing by value
+
+				return true;
+			}
+
+		}
+	}
+
+	errorString = "Song cannot be found in the User id : " + snotifyUserID;
+
+	return false;
+}
+
+bool cSnotify::UpdateRatingOnSong(unsigned int SnotifyUserID, unsigned int songUniqueID, unsigned int newRating)
+{
+	SnotifyUser* user = nullptr;
+	if (GetUserWithSnotifyId(SnotifyUserID, user))
+	{
+		if (user)
+		{
+		
+			cSong* foundSong = user->FindSong(songUniqueID);
+
+			if (foundSong)
+			{
+				foundSong->rating = newRating;
+
+				return true;
+			}
+
+		}
 	}
 
 	return false;
@@ -253,28 +395,69 @@ unsigned int cSnotify::CustomHash(const std::string& input)
 	return hash;
 }
 
-bool cSnotify::IsAscendingOrderString(const char* a, const char* b)
+
+
+
+
+cSong* cSnotify::GetSong(unsigned int SnotifyUserID, unsigned int songUniqueID, std::string& errorString)
 {
-	
-	while (*a != '\0' && *b != '\0')
+	SnotifyUser* user = nullptr;
+
+	if (GetUserWithSnotifyId(SnotifyUserID,user))
 	{
-		if (*a < *b)
+		cSong* findSong = user->FindSong(songUniqueID);
+
+		if (findSong)
 		{
-			return true;  
+			findSong->numberOfTimesPlayed++;  // updating Number of times played
+
+			return findSong;
 		}
-		else if (*a > *b)
-		{
-			return false; 
-		}
-	
-		++a;
-		++b;
+		
 	}
 
-	return (*a == '\0' && *b != '\0');
+	errorString = "Song cannot be found in User id :" + SnotifyUserID;
+
+	return nullptr;
 }
 
+bool cSnotify::GetCurrentSongRating(unsigned int snotifyUserID, unsigned int songUniqueID, unsigned int& songRating)
+{
+	SnotifyUser* user = nullptr;
 
+	if (GetUserWithSnotifyId(snotifyUserID,user))
+	{
+		cSong* findsong = user->FindSong(songUniqueID);
+
+		if (findsong)
+		{
+			songRating = findsong->rating;
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool cSnotify::GetCurrentSongNumberOfPlays(unsigned int snotifyUserID, unsigned int songUniqueID, unsigned int& numberOfPlays)
+{
+	SnotifyUser* user = nullptr;
+
+	if (GetUserWithSnotifyId(snotifyUserID, user))
+	{
+		cSong* findsong = user->FindSong(songUniqueID);
+
+		if (findsong)
+		{
+			numberOfPlays = findsong->numberOfTimesPlayed;
+
+			return true;
+		}
+	}
+
+	return false;
+}
 
 cPerson* cSnotify::FindUserBySIN(unsigned int SIN)
 {
@@ -373,6 +556,74 @@ cSong* cSnotify::FindSong(unsigned int uniqueID)
 	return nullptr;
 }
 
+bool cSnotify::GetUsersSongLibrary(unsigned int snotifyUserID, cSong*& pLibraryArray, unsigned int& sizeOfLibary)
+{
+	SnotifyUser* user = nullptr;
+
+	if (GetUserWithSnotifyId(snotifyUserID, user))
+	{
+		sizeOfLibary = user->listOfSongs.GetLength();
+
+		pLibraryArray = new cSong[sizeOfLibary];
+
+		for (size_t i = 0; i < sizeOfLibary; i++)
+		{
+			pLibraryArray[i] = *(user->listOfSongs[i]);
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+bool cSnotify::GetUsersSongLibraryAscendingByTitle(unsigned int snotifyUserID, cSong*& pLibraryArray, unsigned int& sizeOfLibary)
+{
+
+	SnotifyUser* user = nullptr;
+
+	if (GetUserWithSnotifyId(snotifyUserID, user))
+	{
+		sizeOfLibary = user->listOfSongs.GetLength();
+
+		pLibraryArray = new cSong[sizeOfLibary];
+
+		for (size_t i = 0; i < sizeOfLibary; i++)
+		{
+			pLibraryArray[i] = *(user->listOfSongs[i]);
+		}
+
+		SORT::QuickSort<cSong>(&pLibraryArray[0], 0, sizeOfLibary - 1, IsAscendingOrderBySongTitle);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool cSnotify::GetUsersSongLibraryAscendingByArtist(unsigned int snotifyUserID, cSong*& pLibraryArray, unsigned int& sizeOfLibary)
+{
+	SnotifyUser* user = nullptr;
+
+	if (GetUserWithSnotifyId(snotifyUserID, user))
+	{
+		sizeOfLibary = user->listOfSongs.GetLength();
+
+		pLibraryArray = new cSong[sizeOfLibary];
+
+		for (size_t i = 0; i < sizeOfLibary; i++)
+		{
+			pLibraryArray[i] = *(user->listOfSongs[i]);
+		}
+
+		SORT::QuickSort<cSong>(&pLibraryArray[0], 0, sizeOfLibary - 1, IsAscendingOrderByArtist);
+
+		return true;
+	}
+
+	return false;
+}
+
 bool cSnotify::GetUsers(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
 {
 	if (ListOfSnotifyUsers.IsEmpty())
@@ -384,22 +635,22 @@ bool cSnotify::GetUsers(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
 		return false;
 	}
 
-	unsigned int size = ListOfSnotifyUsers.GetSize();
+	sizeOfUserArray  = ListOfSnotifyUsers.GetSize();
 
-	cPerson* personsInList = new cPerson[size];
+	pAllTheUsers = new cPerson[sizeOfUserArray];
 		
 	ListOfSnotifyUsers.MoveToFirst();
 
-	for (size_t i = 0; i < size; i++)
+	for (size_t i = 0; i < sizeOfUserArray; i++)
 	{
 		
-		personsInList[i] = *(ListOfSnotifyUsers.GetCurrentNode()->data->person);
+		pAllTheUsers[i] = *(ListOfSnotifyUsers.GetCurrentNode()->data->person);
 
 		ListOfSnotifyUsers.MoveNext();
 	}
 
-	pAllTheUsers = personsInList;
-	sizeOfUserArray = size;
+	//pAllTheUsers = personsInList;
+	//sizeOfUserArray = size;
 
 	return true;
 }
@@ -410,12 +661,82 @@ bool cSnotify::GetUsersByID(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArra
 	if (GetUsers(pAllTheUsers, sizeOfUserArray))
 	{
 	
-		SORTING::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingOrderUniqueID);
-		//SORTING::BubbleSort<cPerson>(&pAllTheUsers[0],  sizeOfUserArray - 1, IsAscendingOrderUniqueID);
+		SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingOrderUniqueID);
+		//SORT::BubbleSort<cPerson>(&pAllTheUsers[0],  sizeOfUserArray - 1, IsAscendingOrderUniqueID);
 
 		return true;
 	}
 
 	return false;
 	
+}
+
+bool cSnotify::FindUsersFirstName(std::string firstName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+		return false;
+	}
+
+	sizeOfUserArray = ListOfSnotifyUsers.GetSize();
+
+	pAllTheUsers = new cPerson[sizeOfUserArray];
+
+	unsigned int index = 0;
+
+	ListOfSnotifyUsers.MoveToFirst();
+
+	SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+	do
+	{
+		pAllTheUsers[index] = *findUser->person;
+
+		ListOfSnotifyUsers.MoveNext();
+
+		findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+		index++;
+
+	} while (ListOfSnotifyUsers.GetCurrentNode());
+
+
+	SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyFirstname);
+
+	return true;
+}
+
+bool cSnotify::FindUsersLastName(std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+		return false;
+	}
+
+	sizeOfUserArray = ListOfSnotifyUsers.GetSize();
+
+	pAllTheUsers = new cPerson[sizeOfUserArray];
+
+	unsigned int index = 0;
+
+	ListOfSnotifyUsers.MoveToFirst();
+
+	SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+	do
+	{
+		pAllTheUsers[index] = *findUser->person;
+
+		ListOfSnotifyUsers.MoveNext();
+
+		findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
+		index++;
+
+	} while (ListOfSnotifyUsers.GetCurrentNode());
+
+
+	SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyLastname);
+
+	return true;
 }

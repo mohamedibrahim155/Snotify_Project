@@ -3,7 +3,7 @@
 #include "../Utils/List.h"
 #include "../Snotify/cPerson.h"
 #include "../Snotify/cSong.h"
-using namespace RIO_UTILS;
+using namespace CONTAINERS;
 
 
 class SnotifyUser
@@ -11,6 +11,10 @@ class SnotifyUser
 public:
 	SnotifyUser() = default;
 	//~SnotifyUser();
+
+	 void AddSong(cSong* song);
+	 bool FindSongByIndex(unsigned int songID, int& outIndex);
+	 cSong* FindSong(unsigned int songID);
 
 	cPerson* person = nullptr;
 	List<cSong*> listOfSongs;

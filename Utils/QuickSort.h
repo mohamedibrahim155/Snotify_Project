@@ -1,5 +1,5 @@
 
-namespace SORTING
+namespace SORT
 {
     template <typename T>
     void  Swap(T& a, T& b)
