@@ -208,7 +208,7 @@ void cMusicGenerator::QuickSortSongList(int low, int high) {
 	if (low < high)
 	{
 	
-		int partitionIndex = Partition(low, high);
+		int partitionIndex = PartitionSong(low, high);
 
 		
 		QuickSortSongList(low, partitionIndex - 1);
@@ -217,7 +217,7 @@ void cMusicGenerator::QuickSortSongList(int low, int high) {
 }
 
 
-int cMusicGenerator::Partition(int low, int high)
+int cMusicGenerator::PartitionSong(int low, int high)
 {
 	
 	cSong* pivot = ListOfSongs[high];
@@ -230,16 +230,16 @@ int cMusicGenerator::Partition(int low, int high)
 		if(ListOfSongs[j]->uniqueID > pivot->uniqueID)
 		{
 			i++;
-			Swap(ListOfSongs[i], ListOfSongs[j]);
+			SwapSong(ListOfSongs[i], ListOfSongs[j]);
 		}
 	}
 
-	Swap(ListOfSongs[i + 1], ListOfSongs[high]);
+	SwapSong(ListOfSongs[i + 1], ListOfSongs[high]);
 
 	return i + 1;
 }
 
-void cMusicGenerator::Swap(cSong*& a, cSong*& b)
+void cMusicGenerator::SwapSong(cSong*& a, cSong*& b)
 {
 	cSong* temp = a;
 	a = b;

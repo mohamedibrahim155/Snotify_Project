@@ -34,6 +34,12 @@ cSnotify::~cSnotify()
 {
 }
 
+
+bool IsAscendingOrderUniqueID(cPerson& aID, cPerson& bID)
+{
+	return aID.getSnotifyUniqueUserID() < bID.getSnotifyUniqueUserID();
+}
+
 bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 {
 	SnotifyUser* newSnotifyUser = new SnotifyUser();
@@ -268,6 +274,8 @@ bool cSnotify::IsAscendingOrderString(const char* a, const char* b)
 	return (*a == '\0' && *b != '\0');
 }
 
+
+
 cPerson* cSnotify::FindUserBySIN(unsigned int SIN)
 {
 	if (ListOfSnotifyUsers.IsEmpty())
@@ -394,4 +402,20 @@ bool cSnotify::GetUsers(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
 	sizeOfUserArray = size;
 
 	return true;
+}
+
+bool cSnotify::GetUsersByID(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+
+	if (GetUsers(pAllTheUsers, sizeOfUserArray))
+	{
+	
+		SORTING::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingOrderUniqueID);
+		//SORTING::BubbleSort<cPerson>(&pAllTheUsers[0],  sizeOfUserArray - 1, IsAscendingOrderUniqueID);
+
+		return true;
+	}
+
+	return false;
+	
 }

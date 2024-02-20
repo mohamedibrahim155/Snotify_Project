@@ -5,6 +5,7 @@
 #include "cSong.h"
 #include "../Utils/LinkedList.h"
 #include "../Snotify/SnotifyUser.h"
+#include "../Utils/QuickSort.h"
 using namespace RIO_UTILS;
 
 class cSnotify
@@ -96,10 +97,12 @@ private:
 
 	unsigned int CreateSongHash(std::string& songName, std::string& artistName);
 
-
 	unsigned int CustomHash(const std::string& input);
 
 	bool IsAscendingOrderString(const char* a, const char* b);
+
+	//bool IsAscendingOrderUniqueID(unsigned int aID, unsigned int bID);
+	
 
 };
 

@@ -1,8 +1,16 @@
 
-namespace RIO_UTILS
+namespace SORTING
 {
     template <typename T>
-    int Partition(T arr[], int low, int high, bool (*compare)(const T&, const T&)) 
+    void  Swap(T& a, T& b)
+    {
+        T temp = a;
+        a = b;
+        b = temp;
+    }
+
+    template <typename T>
+    int Partition(T* arr, int low, int high, bool (*compare)( T&,  T&))
     {
         T pivot = arr[high];
         int i = low - 1;
@@ -20,7 +28,7 @@ namespace RIO_UTILS
     }
 
     template <typename T>
-    void QuickSort(T arr[], int low, int high, bool (*compare)(const T&, const T&)) 
+    void QuickSort(T* arr, int low, int high, bool (*compare)( T&,  T&)) 
     {
         if (low < high) 
         {
@@ -33,7 +41,7 @@ namespace RIO_UTILS
 
 
     template <typename T>
-    void BubbleSort(T arr[], size_t size, bool (*compare)(const T&, const T&))
+    void BubbleSort(T* arr, size_t size, bool (*compare)( T&,  T&))
     {
         for (size_t i = 0; i < size - 1; i++)
         {
@@ -47,12 +55,6 @@ namespace RIO_UTILS
         }
     }
 
-    template <typename T>
-    void  Swap(T& a, T& b)
-    {
-        T temp = a;
-        a = b;
-        b = temp;
-    }
+
 
 }

@@ -65,22 +65,35 @@ int main()
 
 	
 	//List<cPerson* > personList;
-	//for (size_t i = 0; i < 150; i++)
-	//{
-	//	cPerson* randomperson = personGenerator.generateRandomPerson();
+	for (size_t i = 0; i < 10; i++)
+	{
+		cPerson* randomperson = personGenerator.generateRandomPerson();
 
-	//	personList.Add(randomperson);
 
-	//	snotify.AddUser(randomperson, errorMessage);
-	//	//snotify.AddUser(randomperson2, errorMessage);
+		snotify.AddUser(randomperson, errorMessage);
 
-	//	
-	//	//personList.Add(randomperson2);
+		std::cout << "Added person : " << randomperson->first << std::endl;
+		std::cout << "UID : " << randomperson->getSnotifyUniqueUserID() << std::endl;
 
-	//	std::cout << "Added person : " << randomperson->first << std::endl;
+		
+	}
 
-	//	
-	//}
+	std::cout << std::endl;
+
+
+	cPerson* users;
+	unsigned int size;
+
+	snotify.GetUsersByID(users, size);
+
+	for (size_t i = 0; i < size; i++)
+	{
+		
+		std::cout << "Added person : " << users[i].first<< std::endl;
+		std::cout << "UID : " << users[i].getSnotifyUniqueUserID() << std::endl;
+
+	}
+
 
 
 	//cPerson* randomperson = personGenerator.generateRandomPerson();

@@ -39,9 +39,9 @@ private:
 
 	void QuickSortSongList(int low, int high);
 
-	int Partition(int low, int high);
+	int PartitionSong(int low, int high);
 
-	void Swap(cSong*& a, cSong*& b);
+	void SwapSong(cSong*& a, cSong*& b);
 };
 
 #endif
