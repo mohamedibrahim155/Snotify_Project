@@ -21,6 +21,9 @@ int main()
 	cMusicGenerator musicGenerator;
 	cSnotify snotify;
 
+	
+
+
 	personGenerator.LoadCensusFiles(babyFileName, surnameFileName, streetFileName, errorMessage);
 
 	std::chrono::high_resolution_clock::time_point start_time = std::chrono::high_resolution_clock::now();
@@ -80,20 +83,35 @@ int main()
 	//}
 
 
-	cPerson* randomperson = personGenerator.generateRandomPerson();
+	//cPerson* randomperson = personGenerator.generateRandomPerson();
 
-	snotify.AddUser(randomperson, errorMessage);
+	//snotify.AddUser(randomperson, errorMessage);
+	//std::cout << "Added person : " << randomperson->first << std::endl;
+	//randomperson = personGenerator.generateRandomPerson();
 
-	std::cout << "Added person : " << randomperson->first << std::endl;
+	//snotify.AddUser(randomperson, errorMessage);
+	//std::cout << "Added person : " << randomperson->first << std::endl;
+	//randomperson = personGenerator.generateRandomPerson();
 
-	randomperson->age = 60000;
-	randomperson->first = "Mohamed Ibrahim";
+	//snotify.AddUser(randomperson, errorMessage);
 
 
-	snotify.UpdateUser(randomperson, errorMessage);
 
-	std::cout << "Updated person : " << randomperson->first << std::endl;
-	std::cout << "Updated person age : " << randomperson->age << std::endl;
+	//std::cout << /*"Added person : " << randomperson->first <<*/ std::endl;
+
+	//randomperson->age = 60000;
+	//randomperson->first = "Mohamed Ibrahim";
+
+
+	//snotify.UpdateUser(randomperson, errorMessage);
+
+	//std::cout << "Updated person : " << randomperson->first << std::endl;
+	//std::cout << "Updated person age : " << randomperson->age << std::endl;
+	//std::cout << /*"Added person : " << randomperson->first <<*/ std::endl;
+	////snotify.DeleteUser(randomperson->getSnotifyUniqueUserID(), errorMessage);
+
+
+
 
 	//for (size_t i = 0; i < personList.GetLength(); i++)
 	//{

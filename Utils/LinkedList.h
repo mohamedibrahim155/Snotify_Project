@@ -37,11 +37,14 @@ namespace RIO_UTILS {
         Node<T>* GetTailNode() const;
         Node<T>* GetHeadNode() const;
 
+        unsigned int GetSize() const;
+
     private:
 
         Node<T>* head;
         Node<T>* tail;
         Node<T>* current;
+        unsigned int size = 0;
     };
 
     template<typename T>
@@ -105,6 +108,8 @@ namespace RIO_UTILS {
             }
             current->prev = newNode;
         }
+
+        size++;
     }
 
     template<typename T>
@@ -132,6 +137,8 @@ namespace RIO_UTILS {
 
             delete current;
             current = nullptr;
+
+            size--;
         }
     }
 
@@ -181,6 +188,12 @@ namespace RIO_UTILS {
     inline Node<T>* LinkedList<T>::GetHeadNode() const
     {
         return head;
+    }
+
+    template<typename T>
+    inline unsigned int LinkedList<T>::GetSize() const
+    {
+        return size;
     }
 
     template<typename T>

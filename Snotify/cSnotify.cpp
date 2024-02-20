@@ -42,7 +42,7 @@ bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 
 	ListOfSnotifyUsers.InsertBeforeCurrent(newSnotifyUser);
 
-	return false;
+	return true;
 }
 
 bool cSnotify::UpdateUser(cPerson* pPerson, std::string& errorString)
@@ -53,7 +53,6 @@ bool cSnotify::UpdateUser(cPerson* pPerson, std::string& errorString)
 	{
 		UpdatedUser->person = pPerson;
 
-		std::cout << "User updated  " << std::endl;
 		return true;
 	}
 
@@ -83,6 +82,19 @@ bool cSnotify::AddSong(cSong* pSong, std::string& errorString)
 	return true;
 }
 
+bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString)
+{
+	cSong* updatedSong = nullptr;
+	if (GetSongWithId(pSong->getUniqueID(), updatedSong))
+	{
+		updatedSong = pSong;
+		return true;
+	}
+	
+	 
+	return false;
+}
+
 bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 {
 
@@ -90,12 +102,19 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 
 	if (GetSongWithId(UniqueSongID, deleteSong))
 	{
+		ListOfSnotifyUsers.DeleteAtCurrent();
 
+		return true;
 	}
 
 	return false;
 }
 
+
+bool cSnotify::CheckString(std::string fistname, std::string lastname)
+{
+	return IsAscendingOrderString(fistname.c_str(), lastname.c_str());
+}
 
 bool cSnotify::GetUserWithSnotifyId(unsigned int snotifyId, SnotifyUser*& snotifyUser)
 {
@@ -114,8 +133,6 @@ bool cSnotify::GetUserWithSnotifyId(unsigned int snotifyId, SnotifyUser*& snotif
 	{
 		if (findUser->person->getSnotifyUniqueUserID() == snotifyId)
 		{
-
-			std::cout << "User found" << std::endl;
 			snotifyUser = findUser;
 			return true;
 		}
@@ -128,7 +145,6 @@ bool cSnotify::GetUserWithSnotifyId(unsigned int snotifyId, SnotifyUser*& snotif
 		}
 	} while (ListOfSnotifyUsers.GetCurrentNode());
 	
-
 
 	return false;
 }
@@ -231,6 +247,27 @@ unsigned int cSnotify::CustomHash(const std::string& input)
 	return hash;
 }
 
+bool cSnotify::IsAscendingOrderString(const char* a, const char* b)
+{
+	
+	while (*a != '\0' && *b != '\0')
+	{
+		if (*a < *b)
+		{
+			return true;  
+		}
+		else if (*a > *b)
+		{
+			return false; 
+		}
+	
+		++a;
+		++b;
+	}
+
+	return (*a == '\0' && *b != '\0');
+}
+
 cPerson* cSnotify::FindUserBySIN(unsigned int SIN)
 {
 	if (ListOfSnotifyUsers.IsEmpty())
@@ -326,4 +363,35 @@ cSong* cSnotify::FindSong(unsigned int uniqueID)
 
 
 	return nullptr;
+}
+
+bool cSnotify::GetUsers(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+		pAllTheUsers = nullptr;
+
+		sizeOfUserArray = 0;
+
+		return false;
+	}
+
+	unsigned int size = ListOfSnotifyUsers.GetSize();
+
+	cPerson* personsInList = new cPerson[size];
+		
+	ListOfSnotifyUsers.MoveToFirst();
+
+	for (size_t i = 0; i < size; i++)
+	{
+		
+		personsInList[i] = *(ListOfSnotifyUsers.GetCurrentNode()->data->person);
+
+		ListOfSnotifyUsers.MoveNext();
+	}
+
+	pAllTheUsers = personsInList;
+	sizeOfUserArray = size;
+
+	return true;
 }
