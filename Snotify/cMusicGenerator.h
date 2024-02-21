@@ -18,10 +18,8 @@ public:
 	// This must be an EXACT MATCH for what's in the billboard100 file. 
 	// So case sensitive, etc. 
 	cSong* findSong(std::string songName, std::string artist);
-	List<cSong*> ListOfSongs;
-	List<unsigned int> ListOfGeneratedHash;
 
-	void BubbleSortSongList();
+
 private:
 
 	bool LoadMusicFile(std::string musicFileName);
@@ -37,11 +35,9 @@ private:
 
 	unsigned int SongID = 10;
 
-	void QuickSortSongList(int low, int high);
+	List<cSong*> ListOfSongs;
+	List<unsigned int> ListOfGeneratedHash;
 
-	int PartitionSong(int low, int high);
-
-	void SwapSong(cSong*& a, cSong*& b);
 };
 
 #endif

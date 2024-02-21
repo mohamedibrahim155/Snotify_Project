@@ -82,8 +82,6 @@ public:
 	// Sorted ascending by last name THEN first name.
 	bool FindUsersFirstLastNames(std::string firstName, std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray);
 
-	bool CheckString(std::string fistname, std::string lastname);
-
 	bool GetUserWithSnotifyId(unsigned int snotifyId , SnotifyUser*& snotifyUser);
 private: 
 

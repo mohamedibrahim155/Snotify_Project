@@ -26,7 +26,7 @@ bool cMusicGenerator::LoadMusicInformation(std::string musicFileName, std::strin
 	{
 		//BubbleSortSongList();
 
-		QuickSortSongList(0, ListOfSongs.GetLength() - 1);
+		
 		return true;
 	}
 	return false ;
@@ -187,61 +187,3 @@ bool cMusicGenerator::IsHashAlreadyGenerated(unsigned int songHash)
 	return false;
 }
 
-void cMusicGenerator::BubbleSortSongList()
-{
-	for (size_t i = 0; i < ListOfSongs.GetLength() - 1; i++)
-	{
-		for (size_t j = 0; j < ListOfSongs.GetLength() - i - 1; j++)
-		{
-			if (IsUniqueValueGreater(ListOfSongs[j], ListOfSongs[j + 1]))
-			{
-				cSong* temp = ListOfSongs[j];
-				ListOfSongs[j] = ListOfSongs[j + 1];
-				ListOfSongs[j + 1] = temp;
-			}
-		}
-	}
-	//ListOfSongs.Sort();
-}
-
-void cMusicGenerator::QuickSortSongList(int low, int high) {
-	if (low < high)
-	{
-	
-		int partitionIndex = PartitionSong(low, high);
-
-		
-		QuickSortSongList(low, partitionIndex - 1);
-		QuickSortSongList(partitionIndex + 1, high);
-	}
-}
-
-
-int cMusicGenerator::PartitionSong(int low, int high)
-{
-	
-	cSong* pivot = ListOfSongs[high];
-	int i = low - 1;
-
-
-	for (int j = low; j <= high-1; j++)
-	{
-		//if (IsUniqueValueGreater(ListOfSongs[j], pivot)) 
-		if(ListOfSongs[j]->uniqueID > pivot->uniqueID)
-		{
-			i++;
-			SwapSong(ListOfSongs[i], ListOfSongs[j]);
-		}
-	}
-
-	SwapSong(ListOfSongs[i + 1], ListOfSongs[high]);
-
-	return i + 1;
-}
-
-void cMusicGenerator::SwapSong(cSong*& a, cSong*& b)
-{
-	cSong* temp = a;
-	a = b;
-	b = temp;
-}

@@ -297,11 +297,6 @@ bool cSnotify::UpdateRatingOnSong(unsigned int SnotifyUserID, unsigned int songU
 }
 
 
-bool cSnotify::CheckString(std::string fistname, std::string lastname)
-{
-	return IsAscendingOrderString(fistname.c_str(), lastname.c_str());
-}
-
 bool cSnotify::GetUserWithSnotifyId(unsigned int snotifyId, SnotifyUser*& snotifyUser)
 {
 
@@ -621,7 +616,7 @@ bool cSnotify::GetUsersSongLibrary(unsigned int snotifyUserID, cSong*& pLibraryA
 bool cSnotify::GetUsersSongLibraryAscendingByTitle(unsigned int snotifyUserID, cSong*& pLibraryArray, unsigned int& sizeOfLibary)
 {
 
-	SnotifyUser* user = nullptr;
+	/*SnotifyUser* user = nullptr;
 
 	if (GetUserWithSnotifyId(snotifyUserID, user))
 	{
@@ -637,6 +632,11 @@ bool cSnotify::GetUsersSongLibraryAscendingByTitle(unsigned int snotifyUserID, c
 		SORT::QuickSort<cSong>(&pLibraryArray[0], 0, sizeOfLibary - 1, IsAscendingOrderBySongTitle);
 
 		return true;
+	}*/
+
+	if (GetUsersSongLibrary(snotifyUserID, pLibraryArray, sizeOfLibary))
+	{
+		SORT::QuickSort<cSong>(&pLibraryArray[0], 0, sizeOfLibary - 1, IsAscendingOrderBySongTitle);
 	}
 
 	return false;
@@ -646,21 +646,26 @@ bool cSnotify::GetUsersSongLibraryAscendingByArtist(unsigned int snotifyUserID, 
 {
 	SnotifyUser* user = nullptr;
 
-	if (GetUserWithSnotifyId(snotifyUserID, user))
+	//if (GetUserWithSnotifyId(snotifyUserID, user))
+	//{
+	//	sizeOfLibary = user->listOfSongs.GetLength();
+
+	//	pLibraryArray = new cSong[sizeOfLibary];
+
+	//	for (size_t i = 0; i < sizeOfLibary; i++)
+	//	{
+	//		pLibraryArray[i] = *(user->listOfSongs[i]);
+	//	}
+
+	//	SORT::QuickSort<cSong>(&pLibraryArray[0], 0, sizeOfLibary - 1, IsAscendingOrderByArtist);
+
+	//	return true;
+	//}
+	if (GetUsersSongLibrary(snotifyUserID, pLibraryArray, sizeOfLibary))
 	{
-		sizeOfLibary = user->listOfSongs.GetLength();
-
-		pLibraryArray = new cSong[sizeOfLibary];
-
-		for (size_t i = 0; i < sizeOfLibary; i++)
-		{
-			pLibraryArray[i] = *(user->listOfSongs[i]);
-		}
-
 		SORT::QuickSort<cSong>(&pLibraryArray[0], 0, sizeOfLibary - 1, IsAscendingOrderByArtist);
-
-		return true;
 	}
+
 
 	return false;
 }
@@ -756,7 +761,7 @@ bool cSnotify::FindUsersFirstName(std::string firstName, cPerson*& pAllTheUsers,
 	}
 	else
 	{
-		std::cout << "Cant find user name with " << firstName << std::endl;
+		std::cout << "Cant find user first name : " << firstName << std::endl;
 		return false;
 	}
 
@@ -809,7 +814,7 @@ bool cSnotify::FindUsersLastName(std::string lastName, cPerson*& pAllTheUsers, u
 	}
 	else
 	{
-		std::cout << "Cant find user name with " << lastName << std::endl;
+		std::cout << "Cant find user last name : " << lastName << std::endl;
 		return false;
 	}
 
@@ -830,7 +835,7 @@ bool cSnotify::FindUsersFirstLastNames(std::string firstName, std::string lastNa
 	pAllTheUsers = new cPerson[sizeOfUserArray];
 
 	unsigned int index = 0;
-	unsigned int userLastNameFound = 0;
+	unsigned int userLastAndFirstNameFound = 0;
 
 	ListOfSnotifyUsers.MoveToFirst();
 
@@ -841,9 +846,9 @@ bool cSnotify::FindUsersFirstLastNames(std::string firstName, std::string lastNa
 		SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
 		if (findUser->person->first == firstName && findUser->person->first == lastName)
 		{
-			pAllTheUsers[userLastNameFound] = *findUser->person;
+			pAllTheUsers[userLastAndFirstNameFound] = *findUser->person;
 
-			userLastNameFound++;
+			userLastAndFirstNameFound++;
 		}
 
 		ListOfSnotifyUsers.MoveNext();
@@ -853,16 +858,16 @@ bool cSnotify::FindUsersFirstLastNames(std::string firstName, std::string lastNa
 	} while (ListOfSnotifyUsers.GetCurrentNode());
 
 
-	sizeOfUserArray = userLastNameFound;
+	sizeOfUserArray = userLastAndFirstNameFound;
 
-	if (userLastNameFound > 0)
+	if (userLastAndFirstNameFound > 0)
 	{
 		SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyFirstAndLastname);
 		return true;
 	}
 	else
 	{
-		std::cout << "Cant find user name with " << lastName << std::endl;
+		std::cout << "Cant find user first name : " << firstName << " Last name : " << lastName << std::endl;
 		return false;
 	}
 
