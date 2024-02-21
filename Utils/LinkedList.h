@@ -145,7 +145,7 @@ namespace CONTAINERS {
     template<typename T>
     inline void LinkedList<T>::MoveNext()
     {
-        if (current != nullptr && current->next != nullptr)
+        if (current != nullptr /*&& current->next != nullptr*/)
         {
             current = current->next;
         }
@@ -154,7 +154,7 @@ namespace CONTAINERS {
     template<typename T>
     inline void LinkedList<T>::MovePrevious()
     {
-        if (current != nullptr && current->prev != nullptr)
+        if (current != nullptr/* && current->prev != nullptr*/)
         {
             current = current->prev;
         }

@@ -64,151 +64,70 @@ int main()
 	}*/
 
 	
-	//List<cPerson* > personList;
+	cPerson*  updateUser = new cPerson();
+
 	for (size_t i = 0; i < 10; i++)
 	{
 		cPerson* randomperson = personGenerator.generateRandomPerson();
 
-
+	
 		snotify.AddUser(randomperson, errorMessage);
 
+		if (i == 0)
+		{
+			updateUser = randomperson;   // for test taking one person
+		}
+		if (i == 2)
+		{
+			randomperson->first = "MOHAMED";
+			randomperson->middle = "AHAMED";
+		}
 		std::cout << "Added person : " << randomperson->first << std::endl;
 		std::cout << "UID : " << randomperson->getSnotifyUniqueUserID() << std::endl;
 
 		
 	}
 
+
 	std::cout << std::endl;
+
+	updateUser->first = "MOHAMED";
+	updateUser->middle = "IBRAHIM";
+	updateUser->last = "DAWOOD";
+	updateUser->age = 23;
+
+	snotify.UpdateUser(updateUser, errorMessage);
 
 
 	cPerson* users;
 	unsigned int size;
 
-	snotify.GetUsersByID(users, size);
+	snotify.GetUsers(users, size);
 
 	for (size_t i = 0; i < size; i++)
 	{
-		
-		std::cout << "Added person : " << users[i].first<< std::endl;
+
+		std::cout << "Get user name : " << users[i].first << std::endl;
+		std::cout << "Get user Middle : " << users[i].middle << std::endl;
+		std::cout << "Get user lasr : " << users[i].last << std::endl;
 		std::cout << "UID : " << users[i].getSnotifyUniqueUserID() << std::endl;
 
 	}
 
+	cPerson* users2;
+	unsigned int size2;
+	snotify.FindUsersFirstName("MOHAMED", users2, size2);
+
+	for (size_t i = 0; i < size2; i++)
+	{
+
+		std::cout << "Found user name : " << users2[i].first << std::endl;
+		std::cout << "Found user Middle name : " << users2[i].middle << std::endl;
+		std::cout << "Found user Last name : " << users2[i].last << std::endl;
+		std::cout << "UID : " << users2[i].getSnotifyUniqueUserID() << std::endl;
+
+	}
 
 
-	//cPerson* randomperson = personGenerator.generateRandomPerson();
-
-	//snotify.AddUser(randomperson, errorMessage);
-	//std::cout << "Added person : " << randomperson->first << std::endl;
-	//randomperson = personGenerator.generateRandomPerson();
-
-	//snotify.AddUser(randomperson, errorMessage);
-	//std::cout << "Added person : " << randomperson->first << std::endl;
-	//randomperson = personGenerator.generateRandomPerson();
-
-	//snotify.AddUser(randomperson, errorMessage);
-
-
-
-	//std::cout << /*"Added person : " << randomperson->first <<*/ std::endl;
-
-	//randomperson->age = 60000;
-	//randomperson->first = "Mohamed Ibrahim";
-
-
-	//snotify.UpdateUser(randomperson, errorMessage);
-
-	//std::cout << "Updated person : " << randomperson->first << std::endl;
-	//std::cout << "Updated person age : " << randomperson->age << std::endl;
-	//std::cout << /*"Added person : " << randomperson->first <<*/ std::endl;
-	////snotify.DeleteUser(randomperson->getSnotifyUniqueUserID(), errorMessage);
-
-
-
-
-	//for (size_t i = 0; i < personList.GetLength(); i++)
-	//{
-	//	cPerson* randomperson = personList[i];
-
-	//	cPerson* findpersonBySIN = snotify.FindUserBySIN(randomperson->SIN);
-	//	std::cout << "Found  User  first Name : " << findpersonBySIN->first << std::endl;
-	//	std::cout << "Found  User  middle Name : " << findpersonBySIN->middle << std::endl;
-	//	std::cout << "Found  User  last Name: " << findpersonBySIN->last << std::endl;
-	//	std::cout << "Found  User ID : " << findpersonBySIN->getSnotifyUniqueUserID() << std::endl;
-
-	//	/*cPerson* findpersonBySIN2 = snotify.FindUserBySIN(randomperson2->SIN);
-
-	//	std::cout << "Found  User   first Name : " << findpersonBySIN2->first << std::endl;
-	//	std::cout << "Found  User  middle Name : " << findpersonBySIN2->middle << std::endl;
-	//	std::cout << "Found  User  last Name: " << findpersonBySIN2->last << std::endl;
-	//	std::cout << "Found  User ID : " << findpersonBySIN2->getSnotifyUniqueUserID() << std::endl;*/
-	//}
-
-	//for (size_t i = 0; i < musicGenerator.ListOfSongs.GetLength(); i++)
-	//{
-	//	/*cPerson* person = personGenerator.generateRandomPerson();
-	//	std::cout << "Name : " << person->first << std::endl;
-	//	std::cout << "surname : " << person->last << std::endl;
-	//	std::cout << "Age :" << person->age << std::endl;
-	//	std::cout << "Gender :" << person->getGenderAsString() << std::endl;
-	//	std::cout << "SIN :" << person->SIN << std::endl;
-	//	std::cout << "Snotify UID :" << person->getSnotifyUniqueUserID() << std::endl;
-	//	std::cout << std::endl;*/
-
-
-	//	std::cout << "Name : " << musicGenerator.ListOfSongs[i]->name << std::endl;
-	//	std::cout << "Artist : " << musicGenerator.ListOfSongs[i]->artist << std::endl;
-	//	std::cout << "Song UID : " << musicGenerator.ListOfSongs[i]->uniqueID << std::endl;
-	//	std::cout << std::endl; 
-	//	
-	//}
-
-	//std::cout << "BEFORE BUBBLE SORT ############" << std::endl;
-
-	//musicGenerator.BubbleSortSongList();
-
-	//for (size_t i = 0; i < 50; i++)
-	//{
-	//	/*cPerson* person = personGenerator.generateRandomPerson();
-	//	std::cout << "Name : " << person->first << std::endl;
-	//	std::cout << "surname : " << person->last << std::endl;
-	//	std::cout << "Age :" << person->age << std::endl;
-	//	std::cout << "Gender :" << person->getGenderAsString() << std::endl;
-	//	std::cout << "SIN :" << person->SIN << std::endl;
-	//	std::cout << "Snotify UID :" << person->getSnotifyUniqueUserID() << std::endl;
-	//	std::cout << std::endl;*/
-
-
-	//	std::cout << "Name : " << musicGenerator.ListOfSongs[i]->name << std::endl;
-	//	std::cout << "Artist : " << musicGenerator.ListOfSongs[i]->artist << std::endl;
-	//	std::cout << "Song UID : " << musicGenerator.ListOfSongs[i]->uniqueID << std::endl;
-	//	std::cout << std::endl;
-
-	//}
-
-	std::cout << "AFTER BUBBLE SORT ############" << std::endl;
-
-	//std::cout << " Total songs : " << musicGenerator.ListOfSongs.GetLength() << std::endl;
-
-
-	////cSong* findSong = musicGenerator.findSong("Poor Little Fool", "Ricky Nelson");
-	//
-	//cSong* findSong = musicGenerator.findSong("Broomstick Cowboy", "Bobby Goldsboro");
-
-	//if (findSong)
-	//{
-	//	std::cout << "Found name " << findSong->name << std::endl;
-	//	std::cout << " Found Artist name : " << findSong->artist << std::endl;
-	//	std::cout << " UID : " << findSong->getUniqueID() << std::endl;
-	//}
-	//else
-	//{
-	//	std::cout << "Song not existed" << std::endl;
-	//}
-
-
-
-
-	
 	return 0;
 }

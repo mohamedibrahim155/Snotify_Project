@@ -79,16 +79,24 @@ bool IsAscendingOrderByArtist(cSong& songA, cSong& songB)
 
 bool IsAscendingbyFirstname(cPerson& aID, cPerson& bID)
 {
-	std::string firstNameA = aID.first;
-	std::string firstNameB = bID.first;
+	std::string firstNameA = (aID.first + aID.middle+aID.last);
+	std::string firstNameB = (bID.first + bID.middle + bID.last);
 
 	return IsAscendingOrderString(firstNameA.c_str(), firstNameB.c_str());
 }
 
 bool IsAscendingbyLastname(cPerson& aID, cPerson& bID)
 {
-	std::string lastNameA = aID.last;
-	std::string lastNameB = bID.last;
+	std::string lastNameA = (aID.last + aID.middle + aID.first);
+	std::string lastNameB = (bID.last + bID.middle + bID.first);
+
+	return IsAscendingOrderString(lastNameA.c_str(), lastNameB.c_str());
+}
+
+bool IsAscendingbyFirstAndLastname(cPerson& aID, cPerson& bID)
+{
+	std::string lastNameA = (aID.last + aID.first + aID.middle);
+	std::string lastNameB = (bID.last + bID.first + bID.middle);
 
 	return IsAscendingOrderString(lastNameA.c_str(), lastNameB.c_str());
 }
@@ -118,15 +126,14 @@ bool cSnotify::UpdateUser(cPerson* pPerson, std::string& errorString)
 
 	if (GetUserWithSnotifyIdAndSIN(pPerson->getSnotifyUniqueUserID(), pPerson->SIN, UpdatedUser))
 	{
-		UpdatedUser->person->first = pPerson->first;
-		UpdatedUser->person->middle = pPerson->middle;
-		UpdatedUser->person->last = pPerson->last;
-		//UpdatedUser->person->age = pPerson ->first;
-		//UpdatedUser->person->streetDirection = pPerson ->first;
+		UpdatedUser->person = nullptr;
+
+		UpdatedUser->person = pPerson;
 
 		return true;
 	}
 
+	errorString = "User ID : " + std::to_string(pPerson->getSnotifyUniqueUserID()) + " not found with SIN - " + std::to_string(pPerson->SIN);
 
 	return false;
 }
@@ -143,6 +150,8 @@ bool cSnotify::DeleteUser(unsigned int SnotifyUserID, std::string& errorString)
 		return true;
 	}
 
+	errorString = "Cannot find User ID : " + std::to_string(SnotifyUserID) + " to delete";
+
 	return false;
 }
 
@@ -150,6 +159,9 @@ bool cSnotify::AddSong(cSong* pSong, std::string& errorString)
 {
 
 	ListOfSongs.InsertBeforeCurrent(pSong);
+
+	errorString = "Successfully added song " + pSong->name + "to snotify";
+
 	return true;
 }
 
@@ -162,6 +174,7 @@ bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString)
 		return true;
 	}
 	
+	errorString = "Song not found to update , Song ID - "  + pSong->getUniqueID();
 	 
 	return false;
 }
@@ -177,6 +190,8 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 
 		return true;
 	}
+
+	errorString = "Song not found to delete, Song ID - " + UniqueSongID;
 
 	return false;
 }
@@ -211,13 +226,7 @@ bool cSnotify::RemoveSongFromUserLibrary(unsigned int snotifyUserID, unsigned in
 	{
 		if (user)
 		{
-			//int songIndex = 0;
-			//if (user->FindSongByIndex(SnotifySongID, songIndex))
-			//{
-			//	user->listOfSongs.RemoveAt(songIndex);
-			//}..      ///removing at index
-
-
+		
 			cSong* foundSong = user->FindSong(SnotifySongID);
 
 			if (foundSong)
@@ -275,22 +284,24 @@ bool cSnotify::GetUserWithSnotifyId(unsigned int snotifyId, SnotifyUser*& snotif
 
 	ListOfSnotifyUsers.MoveToFirst();
 
-	SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+	SnotifyUser* findUser = nullptr;
 
 	do
 	{
+		findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
 		if (findUser->person->getSnotifyUniqueUserID() == snotifyId)
 		{
 			snotifyUser = findUser;
 			return true;
 		}
-		else
-		{
+		/*else
+		{*/
 			ListOfSnotifyUsers.MoveNext();
 
-			findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+			//findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
 
-		}
+		/*}*/
 	} while (ListOfSnotifyUsers.GetCurrentNode());
 	
 
@@ -308,10 +319,12 @@ bool cSnotify::GetUserWithSnotifyIdAndSIN(unsigned int snotifyId, unsigned int S
 
 	ListOfSnotifyUsers.MoveToFirst();
 
-	SnotifyUser* findUserWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data;
+	SnotifyUser* findUserWithSIN = nullptr;
 
 	do
 	{
+		findUserWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data;
+
 		if (findUserWithSIN->person->getSnotifyUniqueUserID() == snotifyId && findUserWithSIN->person->SIN == SIN )
 		{
 
@@ -319,13 +332,10 @@ bool cSnotify::GetUserWithSnotifyIdAndSIN(unsigned int snotifyId, unsigned int S
 			snotifyUser = findUserWithSIN;
 			return true;
 		}
-		else
-		{
+
 			ListOfSnotifyUsers.MoveNext();
 
-			findUserWithSIN = ListOfSnotifyUsers.GetCurrentNode()->data;
 
-		}
 	} while (ListOfSnotifyUsers.GetCurrentNode());
 
 
@@ -346,10 +356,12 @@ bool cSnotify::GetSongWithId(unsigned int songId, cSong*& song)
 
 	ListOfSongs.MoveToFirst();
 
-	cSong* findSong = ListOfSongs.GetCurrentNode()->data;
+	cSong* findSong = nullptr;
 
 	do
 	{
+		findSong = ListOfSongs.GetCurrentNode()->data;
+
 		if (findSong->getUniqueID() == songId)
 		{
 
@@ -357,13 +369,13 @@ bool cSnotify::GetSongWithId(unsigned int songId, cSong*& song)
 			song = findSong;
 			return true;
 		}
-		else
-		{
+		//else
+		//{
 			ListOfSongs.MoveNext();
 
-			findSong = ListOfSongs.GetCurrentNode()->data;
+		//	findSong = ListOfSongs.GetCurrentNode()->data;
 
-		}
+		//}
 	} while (ListOfSongs.GetCurrentNode());
 
 
@@ -683,27 +695,45 @@ bool cSnotify::FindUsersFirstName(std::string firstName, cPerson*& pAllTheUsers,
 	pAllTheUsers = new cPerson[sizeOfUserArray];
 
 	unsigned int index = 0;
+	unsigned int userFirstNameFound = 0;
 
 	ListOfSnotifyUsers.MoveToFirst();
 
-	SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+	
 
 	do
 	{
-		pAllTheUsers[index] = *findUser->person;
+		SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+		if (findUser->person->first == firstName)
+		{
+			pAllTheUsers[userFirstNameFound] = *findUser->person;
+
+			userFirstNameFound++;
+		}
 
 		ListOfSnotifyUsers.MoveNext();
 
-		findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
-
-		index++;
+		index++; // not used
 
 	} while (ListOfSnotifyUsers.GetCurrentNode());
 
 
-	SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyFirstname);
+	sizeOfUserArray = userFirstNameFound;
 
-	return true;
+	if (userFirstNameFound>0)
+	{
+		SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyFirstname);
+		return true;
+	}
+	else
+	{
+		std::cout << "Cant find user name with " << firstName << std::endl;
+		return false;
+	}
+
+
+
+	return false;
 }
 
 bool cSnotify::FindUsersLastName(std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
@@ -718,25 +748,96 @@ bool cSnotify::FindUsersLastName(std::string lastName, cPerson*& pAllTheUsers, u
 	pAllTheUsers = new cPerson[sizeOfUserArray];
 
 	unsigned int index = 0;
+	unsigned int userLastNameFound = 0;
 
 	ListOfSnotifyUsers.MoveToFirst();
 
-	SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+
 
 	do
 	{
-		pAllTheUsers[index] = *findUser->person;
+		SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+		if (findUser->person->last == lastName)
+		{
+			pAllTheUsers[userLastNameFound] = *findUser->person;
+
+			userLastNameFound++;
+		}
 
 		ListOfSnotifyUsers.MoveNext();
 
-		findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
-
-		index++;
+		index++; // not used
 
 	} while (ListOfSnotifyUsers.GetCurrentNode());
 
 
-	SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyLastname);
+	sizeOfUserArray = userLastNameFound;
 
-	return true;
+	if (userLastNameFound > 0)
+	{
+		SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyLastname);
+		return true;
+	}
+	else
+	{
+		std::cout << "Cant find user name with " << lastName << std::endl;
+		return false;
+	}
+
+	
+
+	return false;
+}
+
+bool cSnotify::FindUsersFirstLastNames(std::string firstName, std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	if (ListOfSnotifyUsers.IsEmpty())
+	{
+		return false;
+	}
+
+	sizeOfUserArray = ListOfSnotifyUsers.GetSize();
+
+	pAllTheUsers = new cPerson[sizeOfUserArray];
+
+	unsigned int index = 0;
+	unsigned int userLastNameFound = 0;
+
+	ListOfSnotifyUsers.MoveToFirst();
+
+
+
+	do
+	{
+		SnotifyUser* findUser = ListOfSnotifyUsers.GetCurrentNode()->data;
+		if (findUser->person->first == firstName && findUser->person->first == lastName)
+		{
+			pAllTheUsers[userLastNameFound] = *findUser->person;
+
+			userLastNameFound++;
+		}
+
+		ListOfSnotifyUsers.MoveNext();
+
+		index++; // not used
+
+	} while (ListOfSnotifyUsers.GetCurrentNode());
+
+
+	sizeOfUserArray = userLastNameFound;
+
+	if (userLastNameFound > 0)
+	{
+		SORT::QuickSort<cPerson>(&pAllTheUsers[0], 0, sizeOfUserArray - 1, IsAscendingbyFirstAndLastname);
+		return true;
+	}
+	else
+	{
+		std::cout << "Cant find user name with " << lastName << std::endl;
+		return false;
+	}
+
+
+
+	return false;
 }
