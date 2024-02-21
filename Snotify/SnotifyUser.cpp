@@ -33,3 +33,28 @@ cSong* SnotifyUser::FindSong(unsigned int songID)
 
 	return nullptr;
 }
+
+bool SnotifyUser::IsSongAvailableInSnotify(cSong* songfromSnotify)
+{
+	for (size_t i = 0; i < listOfSongs.GetLength(); i++)
+	{
+		if (listOfSongs[i]== songfromSnotify)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool SnotifyUser::IsSongAvailableInSnotify(unsigned int songId)
+{
+	for (size_t i = 0; i < listOfSongs.GetLength(); i++)
+	{
+		if (listOfSongs[i]->getUniqueID() == songId)
+		{
+			return true;
+		}
+	}
+	return false;
+}

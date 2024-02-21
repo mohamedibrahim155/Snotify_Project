@@ -61,3 +61,13 @@ unsigned int cPerson::getSnotifyUniqueUserID(void)
 {
 	return this->m_Snotify_UniqueUserID;
 }
+
+void cPerson::SetSnotifyUniqueUserID(unsigned int snotifyID)
+{
+	this->m_Snotify_UniqueUserID = snotifyID;
+}
+
+void cPerson::SetSIN(unsigned int SIN)
+{
+	this->SIN = SIN;
+}

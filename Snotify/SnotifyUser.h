@@ -15,6 +15,8 @@ public:
 	 void AddSong(cSong* song);
 	 bool FindSongByIndex(unsigned int songID, int& outIndex);
 	 cSong* FindSong(unsigned int songID);
+	 bool IsSongAvailableInSnotify(cSong* songfromSnotify);
+	 bool IsSongAvailableInSnotify(unsigned int songId);
 
 	cPerson* person = nullptr;
 	List<cSong*> listOfSongs;

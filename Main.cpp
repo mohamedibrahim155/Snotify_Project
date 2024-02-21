@@ -72,10 +72,7 @@ int main()
 		snotifyUsers.Add(testUser);
 
 
-		if (i == 0)
-		{
-			updateUser = randomperson;   // for test taking one person
-		}
+		
 		if (i == 2)
 		{
 			randomperson->first = "MOHAMED";
@@ -90,13 +87,26 @@ int main()
 
 	std::cout << std::endl;
 
+	updateUser->SetSnotifyUniqueUserID(snotifyUsers[0]->person->getSnotifyUniqueUserID());
+	updateUser->SetSIN(snotifyUsers[0]->person->SIN);
+
 	updateUser->first = "MOHAMED";
 	updateUser->middle = "IBRAHIM";
 	updateUser->last = "DAWOOD";
 	updateUser->age = 23;
 
 	snotify.UpdateUser(updateUser, errorMessage);
+	std::cout << errorMessage << std::endl;
 
+	//cPerson* personList;
+	//unsigned int size;
+	//snotify.GetUsersByID(personList, size);
+
+	//for (size_t i = 0; i < size; i++)
+	//{
+	//	std::cout << "First name : " << personList[i].first << std::endl;
+	//	std::cout << "user id : " << personList[i].getSnotifyUniqueUserID() << std::endl;
+	//}
 
 
 	snotify.AddSongToUserLibrary(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2), errorMessage);
@@ -114,10 +124,23 @@ int main()
 	unsigned int rating = 5;
 	snotify.UpdateRatingOnSong(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2)->getUniqueID(), rating);
 
+
+	snotify.GetCurrentSongRating(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2)->getUniqueID(), rating);
+	std::cout << "Song rating : " << rating << std::endl;
+
 	cSong* updatedSongcheck = snotify.GetSong(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2)->getUniqueID(), errorMessage);
-        
-	std::cout << "updated song rating : " << updatedSongcheck->rating << std::endl;
-	std::cout << "updated number of Plays : " << updatedSongcheck->numberOfTimesPlayed << std::endl;
+
+	unsigned int numberOfplay;
+	snotify.GetCurrentSongNumberOfPlays(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2)->getUniqueID(), numberOfplay);
+	std::cout << "Song number of Plays : " << numberOfplay << std::endl;
+
+
+	snotify.DeleteSong(songlist.GetAt(2)->getUniqueID(), errorMessage);
+	std::cout << errorMessage << std::endl;
+
+	snotify.AddSongToUserLibrary(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2), errorMessage);
+	std::cout << errorMessage << std::endl;
+
 
 	//cPerson* users;
 	//unsigned int size;

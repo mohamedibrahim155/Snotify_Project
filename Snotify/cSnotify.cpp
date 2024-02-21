@@ -195,7 +195,7 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 
 	if (GetSongWithId(UniqueSongID, deleteSong))
 	{
-		ListOfSnotifyUsers.DeleteAtCurrent();
+		ListOfSongs.DeleteAtCurrent();
 
 		errorString = " deleted song , Song id :" + std::to_string(UniqueSongID);
 
@@ -215,20 +215,46 @@ bool cSnotify::AddSongToUserLibrary(unsigned int snotifyUserID, cSong* pNewSong,
 	{
 		if (user)
 		{
-			if (user->FindSong(pNewSong->getUniqueID()) == nullptr)
+			cSong* SongInSnotify = FindSong(pNewSong->getUniqueID());
+
+
+			if (SongInSnotify!=nullptr)
 			{
-				user->AddSong(pNewSong);
+				if (user->FindSong(pNewSong->getUniqueID()) == nullptr)
+				{
+					user->AddSong(pNewSong);
 
-				errorString = " Added song : " + pNewSong->name + ", to User id : " + std::to_string(snotifyUserID);
+					errorString = " Added song : " + pNewSong->name + ", to User id : " + std::to_string(snotifyUserID);
 
-				return true;
+					return true;
+				}
+				else
+				{
+					errorString = "Song existed in user library!,  Cannot add song : " + pNewSong->name;
+
+					return true;
+				}
 			}
 			else
 			{
-				errorString = "Song existed in user library!,  Cannot add song : " + pNewSong->name;
+				///  If the song is deleted from the snotify but its in the user library, removeing that element
+				if (user->IsSongAvailableInSnotify(pNewSong->getUniqueID()))
+				{
+					 int removeIndex = 0;
+					if (user->FindSongByIndex(pNewSong->getUniqueID(), removeIndex))
+					{
+						user->listOfSongs.RemoveAt(removeIndex);
 
-				return true;
+						errorString = "Deleted song from library!,  Cannot add song : " + pNewSong->name + "\n";
+						return false;
+
+					}
+				}
+
+				errorString = "Song Not found in snotify!,  Cannot add song : " + pNewSong->name;
+				return false;
 			}
+			
 			
 		}
 		else

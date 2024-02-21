@@ -57,6 +57,8 @@ public:
 	//unsigned int SIN = 0;		// C++ 11
 
 	unsigned int getSnotifyUniqueUserID(void);
+	void  SetSnotifyUniqueUserID(unsigned int snotifyID);
+	void  SetSIN(unsigned int SIN);
 
 private:
 	unsigned int m_Snotify_UniqueUserID;
