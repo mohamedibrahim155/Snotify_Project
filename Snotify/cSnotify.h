@@ -84,9 +84,9 @@ public:
 
 	bool CheckString(std::string fistname, std::string lastname);
 
+	bool GetUserWithSnotifyId(unsigned int snotifyId , SnotifyUser*& snotifyUser);
 private: 
 
-	bool GetUserWithSnotifyId(unsigned int snotifyId , SnotifyUser*& snotifyUser);
 
 	bool GetUserWithSnotifyIdAndSIN(unsigned int snotifyId , unsigned int SIN,  SnotifyUser*& snotifyUser);
 	bool GetSongWithId(unsigned int songId , cSong*& song);

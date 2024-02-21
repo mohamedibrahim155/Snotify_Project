@@ -39,7 +39,7 @@ int main()
 
 	List<cSong*> songlist;
 
-	/*for (size_t i = 0; i < 15; i++)
+	for (size_t i = 0; i < 15; i++)
 	{
 		cSong* randomSong = musicGenerator.getRandomSong();
 
@@ -52,19 +52,11 @@ int main()
 		
 	}
 
-	for (size_t i = 0; i < songlist.GetLength(); i++)
-	{
-		cSong* randomSong = songlist[i];
-
-		cSong* foundSong = snotify.FindSong(randomSong->name, randomSong->artist);
-
-		std::cout << "Found  Song Name : " << randomSong->name << std::endl;
-		std::cout << "Found Artist Name : " << randomSong->artist << std::endl;
-		std::cout << "Found  ID: " << randomSong->getUniqueID() << std::endl;
-	}*/
 
 	
 	cPerson*  updateUser = new cPerson();
+	
+	List<SnotifyUser*> snotifyUsers;
 
 	for (size_t i = 0; i < 10; i++)
 	{
@@ -72,6 +64,13 @@ int main()
 
 	
 		snotify.AddUser(randomperson, errorMessage);
+		
+		SnotifyUser* testUser = new SnotifyUser();
+
+		testUser->person = randomperson;
+
+		snotifyUsers.Add(testUser);
+
 
 		if (i == 0)
 		{
@@ -82,8 +81,8 @@ int main()
 			randomperson->first = "MOHAMED";
 			randomperson->middle = "AHAMED";
 		}
-		std::cout << "Added person : " << randomperson->first << std::endl;
-		std::cout << "UID : " << randomperson->getSnotifyUniqueUserID() << std::endl;
+		//std::cout << "Added person : " << randomperson->first << std::endl;
+		//std::cout << "UID : " << randomperson->getSnotifyUniqueUserID() << std::endl;
 
 		
 	}
@@ -99,34 +98,55 @@ int main()
 	snotify.UpdateUser(updateUser, errorMessage);
 
 
-	cPerson* users;
-	unsigned int size;
 
-	snotify.GetUsers(users, size);
+	snotify.AddSongToUserLibrary(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2), errorMessage);
+	std::cout << errorMessage << std::endl;
 
-	for (size_t i = 0; i < size; i++)
-	{
+	snotify.AddSongToUserLibrary(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(3), errorMessage);
+	std::cout << errorMessage << std::endl;
+	
+	snotify.AddSongToUserLibrary(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(3), errorMessage);
+	std::cout << errorMessage << std::endl;
 
-		std::cout << "Get user name : " << users[i].first << std::endl;
-		std::cout << "Get user Middle : " << users[i].middle << std::endl;
-		std::cout << "Get user lasr : " << users[i].last << std::endl;
-		std::cout << "UID : " << users[i].getSnotifyUniqueUserID() << std::endl;
+	snotify.RemoveSongFromUserLibrary(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(3)->getUniqueID(), errorMessage);
+	std::cout << errorMessage << std::endl;
 
-	}
+	unsigned int rating = 5;
+	snotify.UpdateRatingOnSong(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2)->getUniqueID(), rating);
 
-	cPerson* users2;
-	unsigned int size2;
-	snotify.FindUsersFirstName("MOHAMED", users2, size2);
+	cSong* updatedSongcheck = snotify.GetSong(snotifyUsers.GetAt(0)->person->getSnotifyUniqueUserID(), songlist.GetAt(2)->getUniqueID(), errorMessage);
+        
+	std::cout << "updated song rating : " << updatedSongcheck->rating << std::endl;
+	std::cout << "updated number of Plays : " << updatedSongcheck->numberOfTimesPlayed << std::endl;
 
-	for (size_t i = 0; i < size2; i++)
-	{
+	//cPerson* users;
+	//unsigned int size;
 
-		std::cout << "Found user name : " << users2[i].first << std::endl;
-		std::cout << "Found user Middle name : " << users2[i].middle << std::endl;
-		std::cout << "Found user Last name : " << users2[i].last << std::endl;
-		std::cout << "UID : " << users2[i].getSnotifyUniqueUserID() << std::endl;
+	//snotify.GetUsers(users, size);
 
-	}
+	//for (size_t i = 0; i < size; i++)
+	//{
+
+	//	std::cout << "Get user name : " << users[i].first << std::endl;
+	//	std::cout << "Get user Middle : " << users[i].middle << std::endl;
+	//	std::cout << "Get user lasr : " << users[i].last << std::endl;
+	//	std::cout << "UID : " << users[i].getSnotifyUniqueUserID() << std::endl;
+
+	//}
+
+	//cPerson* users2;
+	//unsigned int size2;
+	//snotify.FindUsersFirstName("MOHAMED", users2, size2);
+
+	//for (size_t i = 0; i < size2; i++)
+	//{
+
+	//	std::cout << "Found user name : " << users2[i].first << std::endl;
+	//	std::cout << "Found user Middle name : " << users2[i].middle << std::endl;
+	//	std::cout << "Found user Last name : " << users2[i].last << std::endl;
+	//	std::cout << "UID : " << users2[i].getSnotifyUniqueUserID() << std::endl;
+
+	//}
 
 
 	return 0;

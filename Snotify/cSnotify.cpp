@@ -117,6 +117,8 @@ bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 
 	ListOfSnotifyUsers.InsertBeforeCurrent(newSnotifyUser);
 
+	errorString = "Added user to Snotify";
+
 	return true;
 }
 
@@ -129,6 +131,8 @@ bool cSnotify::UpdateUser(cPerson* pPerson, std::string& errorString)
 		UpdatedUser->person = nullptr;
 
 		UpdatedUser->person = pPerson;
+
+		errorString = "User ID : " + std::to_string(pPerson->getSnotifyUniqueUserID()) + " Updated user!";
 
 		return true;
 	}
@@ -146,6 +150,8 @@ bool cSnotify::DeleteUser(unsigned int SnotifyUserID, std::string& errorString)
 	if (GetUserWithSnotifyId(SnotifyUserID, snotifyUser))
 	{
 		ListOfSnotifyUsers.DeleteAtCurrent();
+
+		errorString = "Deleted  User ID : " + std::to_string(SnotifyUserID);
 
 		return true;
 	}
@@ -171,6 +177,9 @@ bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString)
 	if (GetSongWithId(pSong->getUniqueID(), updatedSong))
 	{
 		updatedSong = pSong;
+
+		errorString = " updated song , Song id :" + std::to_string(pSong->getUniqueID());
+
 		return true;
 	}
 	
@@ -188,6 +197,8 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 	{
 		ListOfSnotifyUsers.DeleteAtCurrent();
 
+		errorString = " deleted song , Song id :" + std::to_string(UniqueSongID);
+
 		return true;
 	}
 
@@ -204,9 +215,21 @@ bool cSnotify::AddSongToUserLibrary(unsigned int snotifyUserID, cSong* pNewSong,
 	{
 		if (user)
 		{
-			user->AddSong(pNewSong);
+			if (user->FindSong(pNewSong->getUniqueID()) == nullptr)
+			{
+				user->AddSong(pNewSong);
 
-			return true;
+				errorString = " Added song : " + pNewSong->name + ", to User id : " + std::to_string(snotifyUserID);
+
+				return true;
+			}
+			else
+			{
+				errorString = "Song existed in user library!,  Cannot add song : " + pNewSong->name;
+
+				return true;
+			}
+			
 		}
 		else
 		{
@@ -233,13 +256,19 @@ bool cSnotify::RemoveSongFromUserLibrary(unsigned int snotifyUserID, unsigned in
 			{ 
 				user->listOfSongs.Remove(foundSong);    ///removing by value
 
+				errorString = "Song Removed from library in User id : " + std::to_string(snotifyUserID);
 				return true;
+			}
+			else
+			{
+				errorString = "Song Not found from library in User id : " + std::to_string(snotifyUserID);
+				return false;
 			}
 
 		}
 	}
 
-	errorString = "Song cannot be found in the User id : " + snotifyUserID;
+	errorString = "Song cannot be found to remove from library in the User id : " + std::to_string(snotifyUserID);
 
 	return false;
 }
@@ -328,7 +357,7 @@ bool cSnotify::GetUserWithSnotifyIdAndSIN(unsigned int snotifyId, unsigned int S
 		if (findUserWithSIN->person->getSnotifyUniqueUserID() == snotifyId && findUserWithSIN->person->SIN == SIN )
 		{
 
-			std::cout << "User found" << std::endl;
+			//std::cout << "User found" << std::endl;
 			snotifyUser = findUserWithSIN;
 			return true;
 		}
@@ -339,7 +368,7 @@ bool cSnotify::GetUserWithSnotifyIdAndSIN(unsigned int snotifyId, unsigned int S
 	} while (ListOfSnotifyUsers.GetCurrentNode());
 
 
-	std::cout << "User Not found" << std::endl;
+	//std::cout << "User Not found" << std::endl;
 	return false;
 }
 
@@ -365,7 +394,7 @@ bool cSnotify::GetSongWithId(unsigned int songId, cSong*& song)
 		if (findSong->getUniqueID() == songId)
 		{
 
-			std::cout << "Found Song" << std::endl;
+			//std::cout << "Found Song" << std::endl;
 			song = findSong;
 			return true;
 		}
@@ -422,7 +451,7 @@ cSong* cSnotify::GetSong(unsigned int SnotifyUserID, unsigned int songUniqueID, 
 		if (findSong)
 		{
 			findSong->numberOfTimesPlayed++;  // updating Number of times played
-
+			errorString = "Successfuly got the song : " + findSong->name;
 			return findSong;
 		}
 		
