@@ -178,7 +178,7 @@ bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString)
 	{
 		updatedSong = pSong;
 
-		errorString = " updated song , Song id :" + std::to_string(pSong->getUniqueID());
+		errorString = " Updated song Successfully, Song id :" + std::to_string(pSong->getUniqueID());
 
 		return true;
 	}
@@ -197,7 +197,7 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 	{
 		ListOfSongs.DeleteAtCurrent();
 
-		errorString = " deleted song , Song id :" + std::to_string(UniqueSongID);
+		errorString = " Deleted song Successfully!, Song id :" + std::to_string(UniqueSongID);
 
 		return true;
 	}

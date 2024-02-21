@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Snotify\BabyData.h" />
     <ClCompile Include="Snotify\cMusicGenerator.cpp" />
+    <ClCompile Include="Snotify\cSong.cpp" />
     <ClCompile Include="Snotify\SnotifyUser.cpp" />
     <ClCompile Include="Utils\LinkedList.cpp" />
     <ClCompile Include="Snotify\cPerson.cpp" />
