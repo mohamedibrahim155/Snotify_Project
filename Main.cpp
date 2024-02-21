@@ -5,11 +5,13 @@
 #include "Snotify/cSnotify.h"
 #include <chrono>
 #include<random>
+
+
 std::string babyFileName = "Config/BabyName/yob2000.txt";
 std::string streetFileName = "Config/StreetName/Street_Names.csv";
 std::string surnameFileName = "Config/Surname/Names_2010Census.csv";
-//std::string musicFileName = "Config/Music/hot_stuff_2.csv";
-std::string musicFileName = "Config/Music/hot_stuff_2.csv";  // test 
+std::string musicFileName = "Config/Music/hot_stuff_2.csv";
+//std::string musicFileName = "Config/Music/hot_stuff_3.csv";  // test 
 std::string errorMessage;
 
 
